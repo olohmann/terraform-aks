@@ -24,5 +24,5 @@ applicationGatewayKubernetesIngress:
     serviceaccountname: ingress-sa
 EOF
 
-  filename = "${path.module}/../02-aks-post-deploy/app_gw_ingress_helm_config.generated.yaml"
+  filename = "${path.module}/../03-aks-post-deploy-ingress/app_gw_ingress_helm_config.generated.yaml"
 }
