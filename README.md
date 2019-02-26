@@ -19,9 +19,13 @@ Please note that the additional services like Azure Key Vault and Azure Storage 
 
     The actual deployment of an AKS cluster, an Azure Firewall, an Azure Application Gateway and the baseline network infrastructure.
 
-- `02-aks-post-deploy` (optional)
+- `02-aks-post-deploy`
 
-    Once the AKS cluster is up and running, this post deploy step configures the Kubernetes environment to support Azure Pod Identity and the Azure Application Gateway Ingress option. Please note, that this step is completely optional. Feel free to setup a manual integration between Azure App GW and your application using Internal Load Balancers and custom rule management.
+    After completing the Azure resource deployment, the post deploy step configures the Kubernetes cluster role bindings and prepares the helm service account.
+
+- `03-aks-post-deploy-ingress` (optional)
+
+    This post deploy step configures the Kubernetes environment to support Azure Pod Identity and the Azure Application Gateway Ingress option. Please note, that this step is completely optional. Feel free to setup a manual integration between Azure App GW and your application using Internal Load Balancers and custom rule management.
 
 - `10-deployment-sample` (optional)
 
