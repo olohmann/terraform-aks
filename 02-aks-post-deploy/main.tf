@@ -74,14 +74,9 @@ provider "helm" {
     install_tiller = "true"
 }
 
-resource "helm_repository" "azure_managed_pod_identity" {
-    name = "azure-managed-pod-identity"
-    url  = "https://raw.githubusercontent.com/Azure/aad-pod-identity/master/charts/"
-}
-
 resource "helm_release" "azure_managed_pod_identity_release" {
   name       = "aad-pod-identity-release"
-  repository = "azure-managed-pod-identity"
+  repository = "../99-externals/aad-pod-identity/charts"
   chart      = "aad-pod-identity"
 
   # Will be deployed via App GW Chart
@@ -91,7 +86,7 @@ resource "helm_release" "azure_managed_pod_identity_release" {
   }
 }
 
-/*
+
 resource "helm_repository" "application_gateway_kubernetes_ingress" {
     name = "application-gateway-kubernetes-ingress"
     url  = "https://azure.github.io/application-gateway-kubernetes-ingress/helm/"
@@ -111,4 +106,3 @@ resource "helm_release" "app_gw_ingress_release" {
     value = "${var.ingress_namespace}"
   }
 }
-*/
