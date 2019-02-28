@@ -1,12 +1,3 @@
-resource "random_id" "workspace" {
-  keepers = {
-    # Generate a new id each time we switch to a new resource group
-    group_name = "${azurerm_resource_group.rg.name}"
-  }
-
-  byte_length = 4
-}
-
 resource "azurerm_log_analytics_workspace" "la_monitor_containers" {
   name                = "${local.prefix_snake}-${random_id.workspace.hex}"
   location            = "${var.location_log_analytics}"
