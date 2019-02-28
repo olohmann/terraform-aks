@@ -59,3 +59,14 @@ variable "public_ssh_key_path" {
   description = "The Path at which your Public SSH Key is located. Defaults to ~/.ssh/id_rsa.pub"
   default     = "~/.ssh/id_rsa.pub"
 }
+
+variable "azure_container_registry_id" {
+  description = "If specified, gives the AKS cluster pull access rights to the provided ACR."
+  default = ""
+}
+
+variable "create_azure_container_registry" {
+  type         = "string"
+  description  = "Boolean flag, true: create new dedicated ACR, false: don't create dedicated ACR."
+  default      = "false"
+}

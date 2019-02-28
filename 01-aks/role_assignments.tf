@@ -11,6 +11,13 @@ resource "azurerm_role_assignment" "managed_identity_operator" {
   principal_id         = "${var.aks_cluster_sp_object_id}"
 }
 
+resource "azurerm_role_assignment" "acr_pull" {
+  count                = "${var.azure_container_registry_id != "" ? 1 : 0}"
+  scope                = "${var.azure_container_registry_id}"
+  role_definition_name = "acrpull"
+  principal_id         = "${var.aks_cluster_sp_object_id}"
+}
+
 /* Role Assignments for Managed Server Identity */
 resource "azurerm_user_assigned_identity" "app_gw_identity" {
   resource_group_name = "${azurerm_resource_group.rg.name}"
