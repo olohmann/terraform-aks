@@ -9,6 +9,35 @@ This diagram provides a rough overview of the deployed infrastructure:
 
 Please note that the additional services like Azure Key Vault and Azure Storage depicted here and just example on PaaS components that can be integrated into the solution.
 
+## Getting Started
+
+The easiest way, to start get the whole environment setup and deployed is by running the `apply_all.sh` script. However, first you have to **ensure the following preconditions**:
+
+- Terraform is installed in the latest version. Check via `terraform version`.
+- Kubectl is installed in the latest version. Check via `kubectl version`.
+- Helm is installed in the latest version. Check via `helm version`.
+- Azure CLI (az) is installed in the latest version and points to the correct subscription. Check via `az account list` what is configured as `"isDefault": true`. This is important as due to one missing feature in the Terraform Azure Firewall resource provider, we have to fallback to invoke `az` from Terraform.
+- Create a client and server application registration in Azure Active Directory to support Kubernetes OIDC integration. In short, this allows you to use Azure AD as your identity provider to manage cluster access. Follow [these steps](https://docs.microsoft.com/en-us/azure/aks/aad-integration) and retrieve the required setting information. Hint: You do not need to create multiple of these registration in your environment, but you should hand out individual secrets.
+
+When all preconditions are met, you need to gather the required input variables in a file, e.g. `context.tfvars`. The following variables are **mandatory** to provide:
+
+```hcl
+aad_server_app_id="00000000-0000-0000-0000-000000000000"
+aad_server_app_secret="PatVMovW........WXJyV5fw="
+aad_client_app_id="00000000-0000-0000-0000-000000000000"
+aad_tenant_id="00000000-0000-0000-0000-000000000000"
+
+aks_cluster_admins = ["john@contoso.com", "jane@contoso.com"]
+```
+
+Finally you can execute the complete deployment process. `-e` denotes an environment like DEV, QA or PROD. `-p` denotes a prefix like your project name. `-v` points to the `context.tfvars` file discussed earlier:
+
+```sh
+./apply_all.sh -e dev -p contoso -v ./context.tfvars
+```
+
+> If you would like to run the deployments individually instead of using the apply_all.sh script, feel free to look into the script file and take out the bits and pieces which are useful to you.
+
 ## Source Code Structure
 
 - `00-env` (optional)
