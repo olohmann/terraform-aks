@@ -1,8 +1,10 @@
+*.tfvars
 *.generated.*
-*secrets.tfvars
-.DS_Store
+*.tfplan
 
+# Clutter
 ~$*
+.DS_Store
 
 # --------------------------------------------------------
 

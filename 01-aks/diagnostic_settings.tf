@@ -1,6 +1,6 @@
 resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
   name               = "firewall_diagnostics"
-  target_resource_id = "${azurerm_firewall.egress_firewall.id}"
+  target_resource_id = "${azurerm_firewall.firewall.id}"
   log_analytics_workspace_id = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
 
   log {
