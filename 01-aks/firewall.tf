@@ -4,6 +4,7 @@ resource "azurerm_public_ip" "firewall_pip" {
   resource_group_name = "${azurerm_resource_group.rg.name}"
   allocation_method   = "Static"
   sku                 = "Standard"
+  domain_name_label   = "${local.prefix_snake}-${random_id.workspace.hex}"
 }
 
 resource "azurerm_firewall" "firewall" {
