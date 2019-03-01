@@ -58,6 +58,14 @@ fi
 
 VAR_FILE_PATH=$(get_abs_filename ${v})
 
+GREEN='\033[0;32m'
+NC='\033[0m' # No Color
+CURRENT_SUBSCRIPTION_ID=$(az account list --all --query "[?isDefault].id | [0]" | tr -d '"')
+CURRENT_SUBSCRIPTION_NAME=$(az account list --all --query "[?isDefault].name | [0]" | tr -d '"')
+
+echo -e "${GREEN}[NOTE]${NC} Subscription Context: ${GREEN}${CURRENT_SUBSCRIPTION_NAME} (${CURRENT_SUBSCRIPTION_ID})${NC}"
+
+
 pushd $DIR
 cd $DIR/00-env
 .log 6 "[==== 00 Preparing Basic Environment and Service Principals ====]"
