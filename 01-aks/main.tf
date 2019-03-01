@@ -15,7 +15,6 @@ locals {
   aks_dns_service_ip     = "10.1.0.10"
   docker_bridge_cidr     = "172.17.0.1/16"
   firewall_subnet_cidr   = "10.0.240.0/24"
-  app_gw_subnet_cidr     = "10.0.242.0/24"
 }
 
 resource "random_id" "workspace" {
@@ -65,13 +64,6 @@ resource "azurerm_subnet" "aks_subnet" {
 resource "azurerm_subnet_route_table_association" "rt_association" {
   subnet_id      = "${azurerm_subnet.aks_subnet.id}"
   route_table_id = "${azurerm_route_table.aks_subnet_rt.id}"
-}
-
-resource "azurerm_subnet" "gateway_subnet" {
-  name                 = "gateway_subnet"
-  resource_group_name  = "${azurerm_resource_group.rg.name}"
-  address_prefix       = "${local.app_gw_subnet_cidr}"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
 }
 
 # Subnet Calc: 10.0.10.0/24 -> IP Range: 10.0.10.1 - 10.0.10.254

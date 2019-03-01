@@ -26,7 +26,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   action              = "Allow"
 
   rule {
-    name = "aks-rules"
+    name = "aks-rules-https"
 
     source_addresses = ["${azurerm_virtual_network.vnet.address_space.0}"]
 
@@ -51,7 +51,9 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
       "production.cloudflare.docker.com",
       "registry-1.docker.io",
       "security.ubuntu.com",
-      "storage.googleapis.com"
+      "storage.googleapis.com",
+      "quay.io",
+      "d3uo42mtx6z2cr.cloudfront.net"
     ]
 
     protocol {
@@ -59,22 +61,63 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
       type = "Https"
     }
   }
+
+  rule {
+    name = "aks-rules-http"
+
+    source_addresses = ["${azurerm_virtual_network.vnet.address_space.0}"]
+
+    target_fqdns = [
+      "azure.archive.ubuntu.com",
+      "download.opensuse.org",
+      "security.ubuntu.com"
+    ]
+
+    protocol {
+      port = 80
+      type = "Http"
+    }
+  }
 }
 
+# TODO: 
 resource "azurerm_firewall_network_rule_collection" "egress_rules_ssh" {
-  name                = "aks-rules-ssh"
+  name                = "aks-rules-cluster-egress"
   azure_firewall_name = "${azurerm_firewall.egress_firewall.name}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   priority            = 150
   action              = "Allow"
 
   rule {
+    name = "ntp-ubuntu"
+
+    source_addresses = ["*"]
+
+    destination_ports = [
+      "123"
+    ]
+
+    destination_addresses = [
+      "91.189.89.199",
+      "91.189.89.198",
+      "91.189.94.4",
+      "91.189.91.157"
+    ]
+
+    protocols = [
+      "UDP"
+    ]
+  }
+
+  # TODO: Minimize surface via Azure DC list. Will change with VNet Svc Endpoint Support.
+  rule {
     name = "aks-rules-ssh"
 
-    source_addresses = ["${azurerm_virtual_network.vnet.address_space.0}"]
+    source_addresses = ["*"]
 
     destination_ports = [
       "22",
+      "443"
     ]
 
     destination_addresses = [
@@ -85,4 +128,14 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_ssh" {
       "TCP"
     ]
   }
+}
+
+resource "local_file" "firewall_config" {
+  content = <<EOF
+azure_firewall_name = "${azurerm_firewall.egress_firewall.name}"
+azure_firewall_resource_group_name = "${azurerm_resource_group.rg.name}"
+azure_firewall_pip = "${azurerm_public_ip.egress_firewall_pip.ip_address}"
+EOF
+
+  filename = "${path.module}/../03-aks-post-deploy-ingress/firewall_config.generated.tfvars"
 }
