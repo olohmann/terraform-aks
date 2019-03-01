@@ -13,10 +13,10 @@ Please note that the additional services like Azure Key Vault and Azure Storage 
 
 The easiest way, to start get the whole environment setup and deployed is by running the `apply_all.sh` script. However, first you have to **ensure the following preconditions**:
 
-- Terraform is installed in the latest version. Check via `terraform version`.
-- Kubectl is installed in the latest version. Check via `kubectl version`.
-- Helm is installed in the latest version. Check via `helm version`.
-- Azure CLI (az) is installed in the latest version and points to the correct subscription. Check via `az account list` what is configured as `"isDefault": true`. This is important as due to one missing feature in the Terraform Azure Firewall resource provider, we have to fallback to invoke `az` from Terraform.
+- [Terraform](https://www.terraform.io/) is installed in the latest version. Check via `terraform version`.
+- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl) is installed in the latest version. Check via `kubectl version`.
+- [Helm](https://github.com/helm/helm) is installed in the latest version. Check via `helm version`.
+- [Azure CLI (az)](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) is installed in the latest version and points to the correct subscription. Check via `az account list` what is configured as `"isDefault": true`. This is important as due to one missing feature in the Terraform Azure Firewall resource provider, we have to fallback to invoke `az` from Terraform.
 - Create a client and server application registration in Azure Active Directory to support Kubernetes OIDC integration. In short, this allows you to use Azure AD as your identity provider to manage cluster access. Follow [these steps](https://docs.microsoft.com/en-us/azure/aks/aad-integration) and retrieve the required setting information. Hint: You do not need to create multiple of these registration in your environment, but you should hand out individual secrets.
 
 When all preconditions are met, you need to gather the required input variables in a file, e.g. `context.tfvars`. The following variables are **mandatory** to provide:
