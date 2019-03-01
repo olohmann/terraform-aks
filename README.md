@@ -17,7 +17,7 @@ Please note that the additional services like Azure Key Vault and Azure Storage 
 
 - `01-aks`
 
-    The actual deployment of an AKS cluster, an Azure Firewall, an Azure Application Gateway and the baseline network infrastructure.
+    The actual deployment of an AKS cluster, an Azure Firewall, and the baseline network infrastructure.
 
 - `02-aks-post-deploy`
 
@@ -25,11 +25,11 @@ Please note that the additional services like Azure Key Vault and Azure Storage 
 
 - `03-aks-post-deploy-ingress` (optional)
 
-    This post deploy step configures the Kubernetes environment to support Azure Pod Identity and the Azure Application Gateway Ingress option. Please note, that this step is completely optional. Feel free to setup a manual integration between Azure App GW and your application using Internal Load Balancers and custom rule management.
+    This post deploy step configures the Kubernetes environment to support Azure Pod Identity and the Azure nginx Ingress option. Please note, that this step is completely optional. Feel free to setup a manual integration.
 
 - `10-deployment-sample` (optional)
 
-    An optional example to verify the deployment. It exposes the Guestbook sample application on port 80 of your Application Gateway IP.
+    An optional example to verify the deployment. It exposes an echo service.
 
 - `99-externals`
 
@@ -37,7 +37,7 @@ Please note that the additional services like Azure Key Vault and Azure Storage 
 
 ## Disclaimer
 
-This sample deploys AKS in combination with Azure Firewall and Azure Application Gateway. Please note, that Microsoft does not officially support an AKS setup in combination with Azure Firewall.
+This sample deploys AKS in combination with Azure Firewall and nginx ingress. Please note, that Microsoft does not officially support an AKS setup in combination with Azure Firewall.
 
 ## Misc
 
