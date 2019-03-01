@@ -1,26 +1,26 @@
-resource "azurerm_public_ip" "egress_firewall_pip" {
-  name                = "${local.prefix_snake}-egress-firewall-pip"
+resource "azurerm_public_ip" "firewall_pip" {
+  name                = "${local.prefix_snake}-firewall-pip"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   allocation_method   = "Static"
   sku                 = "Standard"
 }
 
-resource "azurerm_firewall" "egress_firewall" {
-  name                = "${local.prefix_snake}-egress-firewall"
+resource "azurerm_firewall" "firewall" {
+  name                = "${local.prefix_snake}-firewall"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
 
   ip_configuration {
     name                 = "configuration"
     subnet_id            = "${azurerm_subnet.firewall_subnet.id}"
-    public_ip_address_id = "${azurerm_public_ip.egress_firewall_pip.id}"
+    public_ip_address_id = "${azurerm_public_ip.firewall_pip.id}"
   }
 }
 
 resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   name                = "${local.prefix_snake}-aks-egress"
-  azure_firewall_name = "${azurerm_firewall.egress_firewall.name}"
+  azure_firewall_name = "${azurerm_firewall.firewall.name}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   priority            = 100
   action              = "Allow"
@@ -81,9 +81,9 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
 }
 
 # TODO: 
-resource "azurerm_firewall_network_rule_collection" "egress_rules_ssh" {
+resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
   name                = "aks-rules-cluster-egress"
-  azure_firewall_name = "${azurerm_firewall.egress_firewall.name}"
+  azure_firewall_name = "${azurerm_firewall.firewall.name}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   priority            = 150
   action              = "Allow"
@@ -132,10 +132,10 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_ssh" {
 
 resource "local_file" "firewall_config" {
   content = <<EOF
-azure_firewall_name = "${azurerm_firewall.egress_firewall.name}"
+azure_firewall_name = "${azurerm_firewall.firewall.name}"
 azure_firewall_resource_group_name = "${azurerm_resource_group.rg.name}"
-azure_firewall_pip = "${azurerm_public_ip.egress_firewall_pip.ip_address}"
+azure_firewall_pip = "${azurerm_public_ip.firewall_pip.ip_address}"
 EOF
 
-  filename = "${path.module}/../03-aks-post-deploy-ingress/firewall_config.generated.tfvars"
+  filename = "${path.module}/../03-aks-post-deploy-ingress/${terraform.workspace}_firewall_config.generated.tfvars"
 }

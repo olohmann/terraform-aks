@@ -49,7 +49,7 @@ resource "azurerm_route_table" "aks_subnet_rt" {
     name                   = "default"
     address_prefix         = "0.0.0.0/0"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "${azurerm_firewall.egress_firewall.ip_configuration.0.private_ip_address}"
+    next_hop_in_ip_address = "${azurerm_firewall.firewall.ip_configuration.0.private_ip_address}"
   }
 }
 
