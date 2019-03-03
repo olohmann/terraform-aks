@@ -28,3 +28,34 @@ resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
     }
   }
 }
+
+
+resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
+  name               = "aks_diagnostics"
+  target_resource_id = "${azurerm_kubernetes_cluster.aks.id}"
+  log_analytics_workspace_id = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
+
+  log {
+    category = "kube-apiserver"
+    enabled  = true
+    retention_policy {
+        enabled = false
+    }
+  }
+
+  log {
+    category = "kube-audit"
+    enabled  = true
+    retention_policy {
+        enabled = false
+    }
+  }
+  metric {
+    category = "AllMetrics"
+    enabled = false
+    
+    retention_policy {
+      enabled = false
+    }
+  }
+}
