@@ -42,7 +42,7 @@ access_key           = "${azurerm_storage_account.sa.primary_access_key}"
 key                  = "env.tfstate"
 EOF
 
-  filename = "${path.module}/../00-env/${terraform.workspace}_backend.tfvars"
+  filename = "${path.module}/../01-env/${terraform.workspace}_backend.tfvars"
 }
 
 resource "local_file" "backend_config_aks" {
