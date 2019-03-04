@@ -140,9 +140,9 @@ run_terraform false ${e} ${p} "01-env" ${VAR_FILE_PATH} ""
 run_terraform false ${e} ${p} "02-aks" ${VAR_FILE_PATH} "-var-file=./${e}_aks_cluster_sp.generated.tfvars" 
 
 .log 6 "[==== 03 AKS Cluster: RBAC ====]"
-#run_terraform false ${e} ${p} "03-aks-post-deploy" ${VAR_FILE_PATH} ""
+run_terraform false ${e} ${p} "03-aks-post-deploy" ${VAR_FILE_PATH} ""
 
 .log 6 "[==== 04 AKS Cluster: Ingress ====]"
-#run_terraform false ${e} ${p} "04-aks-post-deploy-ingress" ${VAR_FILE_PATH} "-var-file=./${e}_firewall_config.generated.tfvars" 
+run_terraform false ${e} ${p} "04-aks-post-deploy-ingress" ${VAR_FILE_PATH} "-var-file=./${e}_firewall_config.generated.tfvars" 
 
 .log 6 "[==== Done. ====]"
