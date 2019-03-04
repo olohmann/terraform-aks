@@ -70,3 +70,15 @@ variable "create_azure_container_registry" {
   description  = "Boolean flag, true: create new dedicated ACR, false: don't create dedicated ACR."
   default      = "false"
 }
+
+variable "external_pip_name" {
+  type = "string"
+  description = "If configured, the Azure Firewall resource will reference the externally create Puplic IP instead of creating a new one."
+  default = ""
+}
+
+variable "external_pip_resource_group" {
+  type = "string"
+  description = "If configured, the Azure Firewall resource will reference the externally create Puplic IP instead of creating a new one."
+  default = ""
+}

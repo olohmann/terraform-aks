@@ -1,4 +1,11 @@
+data "azurerm_subscription" "current" {}
+
+locals {
+  external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
+}
+
 resource "azurerm_public_ip" "firewall_pip" {
+  count               = "${var.external_pip_name == "" ? 1 : 0}"
   name                = "${local.prefix_snake}-firewall-pip"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
@@ -15,7 +22,7 @@ resource "azurerm_firewall" "firewall" {
   ip_configuration {
     name                 = "configuration"
     subnet_id            = "${azurerm_subnet.firewall_subnet.id}"
-    public_ip_address_id = "${azurerm_public_ip.firewall_pip.id}"
+    public_ip_address_id= "${var.external_pip_name == "" ? azurerm_public_ip.firewall_pip.id : local.external_pip_id}"
   }
 }
 
