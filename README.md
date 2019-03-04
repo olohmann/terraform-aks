@@ -39,7 +39,9 @@ Finally you can execute the complete deployment process. `-e` denotes an environ
 
 > If you would like to run the deployments individually instead of using the apply_all.sh script, feel free to look into the script file and take out the bits and pieces which are useful to you.
 
-## Source Code Structure
+## Deployment Structure
+
+The deployment structure is basically divided into two parts. The first part takes care of the Azure Resources, the second part takes care of the Kubernetes side.
 
 - `00-env` (optional)
 
@@ -59,6 +61,8 @@ Finally you can execute the complete deployment process. `-e` denotes an environ
 
     > Requires cluster-admin rights on Kubernetes.
 
+-----------
+
 - `03-aks-post-deploy-ingress` (optional)
 
     This post deploy step configures the Kubernetes environment to support Azure Pod Identity and the Azure nginx Ingress option. Please note, that this step is completely optional. Feel free to setup a manual integration.
@@ -71,7 +75,9 @@ Finally you can execute the complete deployment process. `-e` denotes an environ
 
     > Requires cluster-admin rights on Kubernetes.
 
-- `99-externals`
+-----------
+
+- `99-externals` (ignore for the moment)
 
     Git sub-module which currently links to the aad-pod-identity GitHub repository. As soon as the aad-pod-identity project issues a proper remote Helm chart, the reference can be removed.
 
