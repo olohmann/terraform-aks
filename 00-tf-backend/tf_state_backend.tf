@@ -1,9 +1,9 @@
 locals {
-  prefix_snake = "${terraform.workspace}-${var.prefix}"
+  prefix_snake = "${var.prefix}"
 }
  
 resource "azurerm_resource_group" "rg" {
-  name     = "${local.prefix_snake}-tf-admin-rg"
+  name     = "${local.prefix_snake}-admin-rg"
   location = "${var.location}"
 }
 
@@ -42,7 +42,7 @@ access_key           = "${azurerm_storage_account.sa.primary_access_key}"
 key                  = "env.tfstate"
 EOF
 
-  filename = "${path.module}/../01-env/${terraform.workspace}_backend.tfvars"
+  filename = "${path.module}/../01-env/backend.tfvars"
 }
 
 resource "local_file" "backend_config_aks" {
@@ -54,7 +54,7 @@ access_key           = "${azurerm_storage_account.sa.primary_access_key}"
 key                  = "aks.tfstate"
 EOF
 
-  filename = "${path.module}/../02-aks/${terraform.workspace}_backend.tfvars"
+  filename = "${path.module}/../02-aks/backend.tfvars"
 }
 
 resource "local_file" "backend_config_aks_post_deploy" {
@@ -66,7 +66,7 @@ access_key           = "${azurerm_storage_account.sa.primary_access_key}"
 key                  = "aks_post_deploy.tfstate"
 EOF
 
-  filename = "${path.module}/../03-aks-post-deploy/${terraform.workspace}_backend.tfvars"
+  filename = "${path.module}/../03-aks-post-deploy/backend.tfvars"
 }
 
 resource "local_file" "backend_config_aks_post_deploy_ingress" {
@@ -78,5 +78,5 @@ access_key           = "${azurerm_storage_account.sa.primary_access_key}"
 key                  = "aks_post_deploy_ingress.tfstate"
 EOF
 
-  filename = "${path.module}/../04-aks-post-deploy-ingress/${terraform.workspace}_backend.tfvars"
+  filename = "${path.module}/../04-aks-post-deploy-ingress/backend.tfvars"
 }
