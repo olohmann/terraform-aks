@@ -45,21 +45,31 @@ Finally you can execute the complete deployment process. `-e` denotes an environ
 
     An optional preparation step that creates the required service principals for the deployment. It creates a local secret tfvars file in `01-aks`. The secret file is git-ignored and can be used to as a parameter input file for the actual AKS deployment in `01-aks`.
 
+    > Required rights for execution: Allowance to create Azure Service Principals in your Azure AD tenant, see [Azure Docs](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#required-permissions).
+
 - `01-aks`
 
     The actual deployment of an AKS cluster, an Azure Firewall, and the baseline network infrastructure.
+
+    > Required Azure RBAC: Subscription *Owner*.
 
 - `02-aks-post-deploy`
 
     After completing the Azure resource deployment, the post deploy step configures the Kubernetes cluster role bindings and prepares the helm service account.
 
+    > Requires cluster-admin rights on Kubernetes.
+
 - `03-aks-post-deploy-ingress` (optional)
 
     This post deploy step configures the Kubernetes environment to support Azure Pod Identity and the Azure nginx Ingress option. Please note, that this step is completely optional. Feel free to setup a manual integration.
 
+    > Requires cluster-admin rights on Kubernetes.
+
 - `10-deployment-sample` (optional)
 
     An optional example to verify the deployment. It exposes an echo service.
+
+    > Requires cluster-admin rights on Kubernetes.
 
 - `99-externals`
 
