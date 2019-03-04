@@ -72,14 +72,16 @@ run_terraform() {
         terraform init -backend-config=./backend.tfvars
     fi
 
-    TF_WORKSPACE=$(terraform workspace show)
-    .log 6 "Current Workspace: ${TF_WORKSPACE}"
-    if [ ${TF_WORKSPACE} = ${RT_ENV} ]; then
-        .log 6 "No switch required: ${TF_WORKSPACE} = ${RT_ENV}"
-    else
-        .log 6 "Switch to workspace ${RT_ENV} required."
-        terraform workspace new ${RT_ENV}
-        terraform workspace select ${RT_ENV}
+    if [ "${RT_IS_BACKEND}" = false ]; then
+        TF_WORKSPACE=$(terraform workspace show)
+        .log 6 "Current Workspace: ${TF_WORKSPACE}"
+        if [ ${TF_WORKSPACE} = ${RT_ENV} ]; then
+            .log 6 "No switch required: ${TF_WORKSPACE} = ${RT_ENV}"
+        else
+            .log 6 "Switch to workspace ${RT_ENV} required."
+            terraform workspace new ${RT_ENV}
+            terraform workspace select ${RT_ENV}
+        fi
     fi
 
     if [ "${i}" = true ]; then
