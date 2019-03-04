@@ -69,7 +69,7 @@ run_terraform() {
     if [ "${RT_IS_BACKEND}" = true ]; then
         terraform init
     else
-        terraform init -backend-config=./${e}_backend.tfvars
+        terraform init -backend-config=./backend.tfvars
     fi
 
     TF_WORKSPACE=$(terraform workspace show)
