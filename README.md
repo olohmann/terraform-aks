@@ -43,27 +43,31 @@ Finally you can execute the complete deployment process. `-e` denotes an environ
 
 The deployment structure is basically divided into two parts. The first part takes care of the Azure Resources, the second part takes care of the Kubernetes side.
 
-- `00-env` (optional)
+- `00-tf-backend`
 
-    An optional preparation step that creates the required service principals for the deployment. It creates a local secret tfvars file in `01-aks`. The secret file is git-ignored and can be used to as a parameter input file for the actual AKS deployment in `01-aks`.
+   Configures the terraform azure backend state provider. It generates a local set of tfvars files `{envName}_backend.tfvars` that defines the Azure Storage account backend location for the terraform state.
+
+- `01-env` (optional)
+
+    An optional preparation step that creates the required service principals for the deployment. It creates a local secret tfvars file in `02-aks`. The secret file is git-ignored and can be used to as a parameter input file for the actual AKS deployment in `02-aks`.
 
     > Required rights for execution: Allowance to create Azure Service Principals in your Azure AD tenant, see [Azure Docs](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#required-permissions).
 
-- `01-aks`
+- `02-aks`
 
     The actual deployment of an AKS cluster, an Azure Firewall, and the baseline network infrastructure.
 
     > Required Azure RBAC: Subscription *Owner*.
 
-- `02-aks-post-deploy`
+-----------
+
+- `03-aks-post-deploy`
 
     After completing the Azure resource deployment, the post deploy step configures the Kubernetes cluster role bindings and prepares the helm service account.
 
     > Requires cluster-admin rights on Kubernetes.
 
------------
-
-- `03-aks-post-deploy-ingress` (optional)
+- `04-aks-post-deploy-ingress` (optional)
 
     This post deploy step configures the Kubernetes environment to support Azure Pod Identity and the Azure nginx Ingress option. Please note, that this step is completely optional. Feel free to setup a manual integration.
 

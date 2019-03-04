@@ -67,8 +67,8 @@ echo -e "${GREEN}[NOTE]${NC} Subscription Context: ${GREEN}${CURRENT_SUBSCRIPTIO
 
 
 pushd $DIR
-cd $DIR/00-env
-.log 6 "[==== 00 Preparing Basic Environment and Service Principals ====]"
+cd $DIR/01-env
+.log 6 "[==== 01 Preparing Basic Environment and Service Principals ====]"
 
 terraform init
 
@@ -87,8 +87,8 @@ popd
 
 
 pushd $DIR
-cd $DIR/01-aks
-.log 6 "[==== 01 Preparing AKS Environment ====]"
+cd $DIR/02-aks
+.log 6 "[==== 02 Preparing AKS Environment ====]"
 
 terraform init -backend-config=./${e}_backend.tfvars 
 
@@ -106,8 +106,8 @@ terraform plan -out=terraform.tfplan -var-file=${VAR_FILE_PATH} -var "prefix=${p
 popd 
 
 pushd $DIR
-cd $DIR/02-aks-post-deploy
-.log 6 "[==== 02 Preparing AKS Post Deploy ====]"
+cd $DIR/03-aks-post-deploy
+.log 6 "[==== 03 Preparing AKS Post Deploy ====]"
 
 terraform init -backend-config=./${e}_backend.tfvars 
 
@@ -125,8 +125,8 @@ terraform plan -out=terraform.tfplan --var-file=${VAR_FILE_PATH} && terraform ap
 popd 
 
 pushd $DIR
-cd $DIR/03-aks-post-deploy-ingress
-.log 6 "[==== 03 Preparing AKS Post Deploy for Ingress ====]"
+cd $DIR/04-aks-post-deploy-ingress
+.log 6 "[==== 04 Preparing AKS Post Deploy for Ingress ====]"
 
 terraform init -backend-config=./${e}_backend.tfvars 
 
