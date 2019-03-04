@@ -50,6 +50,46 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
         enabled = false
     }
   }
+
+  log {
+    category = "guard"
+    enabled  = true
+    retention_policy {
+        enabled = false
+    }
+  }
+
+  log {
+    category = "cluster-autoscaler"
+    enabled  = false
+    retention_policy {
+        enabled = false
+    }
+  }
+  log {
+    category = "kube-scheduler"
+    enabled  = false
+    retention_policy {
+        enabled = false
+    }
+  }
+
+  log {
+    category = "kube-controller-manager"
+    enabled  = false
+    retention_policy {
+        enabled = false
+    }
+  }
+
+  log {
+    category = "kube-apiserver"
+    enabled  = false
+    retention_policy {
+        enabled = false
+    }
+  }
+
   metric {
     category = "AllMetrics"
     enabled = false
