@@ -138,5 +138,5 @@ azure_firewall_resource_group_name = "${azurerm_resource_group.rg.name}"
 azure_firewall_pip = "${azurerm_public_ip.firewall_pip.ip_address}"
 EOF
 
-  filename = "${path.module}/../03-aks-post-deploy-ingress/${terraform.workspace}_firewall_config.generated.tfvars"
+  filename = "${path.module}/../04-aks-post-deploy-ingress/${terraform.workspace}_firewall_config.generated.tfvars"
 }
