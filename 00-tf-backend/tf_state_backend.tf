@@ -25,13 +25,14 @@ resource "azurerm_storage_account" "sa" {
   }
 }
 
+
 resource "azurerm_storage_container" "sc" {
   name                  = "tf-state"
   resource_group_name   = "${azurerm_resource_group.rg.name}"
   storage_account_name  = "${azurerm_storage_account.sa.name}"
   container_access_type = "private"
 }
-
+/*
 
 resource "local_file" "backend_config_env" {
   content = <<EOF
@@ -80,3 +81,4 @@ EOF
 
   filename = "${path.module}/../04-aks-post-deploy-ingress/backend.tfvars"
 }
+*/
