@@ -21,7 +21,7 @@ variable "storage_container_name" {
   description = "name of the storage container for the terraform state"
 }
 
-variable "name" {
+variable "storage_account_primary_access_key" {
   type = "string"
   description = "primary access key to access tf state on the SA"
 }

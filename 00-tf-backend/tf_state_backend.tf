@@ -1,13 +1,3 @@
-locals {
-  prefix_snake = "${var.prefix}"
-}
- 
-resource_group_name  = "${var.resource_group_name}"
-storage_account_name = "${var.storage_account_name}"
-container_name       = "${var.storage_container_name}"
-access_key           = "${var.storage_account_primary_access_key}"
-
-
 resource "local_file" "backend_config_env" {
   content = <<EOF
 resource_group_name  = "${var.resource_group_name}"
