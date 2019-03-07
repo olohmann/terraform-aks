@@ -20,6 +20,34 @@ The easiest way, to start get the whole environment setup and deployed is by run
 - [Azure CLI extension for Azure Firewall] `az extension add --name azure-firewall`.
 - Create a client and server application registration in Azure Active Directory to support Kubernetes OIDC integration. In short, this allows you to use Azure AD as your identity provider to manage cluster access. Follow [these steps](https://docs.microsoft.com/en-us/azure/aks/aad-integration) and retrieve the required setting information. Hint: You do not need to create multiple of these registration in your environment, but you should hand out individual secrets.
 - Enable the AKS Audit Log **feature flag** in your subscription as described in the *Note* field in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/view-master-logs). **Only register the flag, all actual diagnostic configuration is fully automated during the deployment.**
+- Creating Storage for the Terraform state
+
+````sh
+az group create \
+    --name <todo> \
+    --location westeurope
+
+az storage account create \
+    --name <todo> \
+    --resource-group <todo> \
+    --location westeurope \
+    --sku Standard_LRS \
+    --encryption blob file \
+    --https-only
+
+az storage account keys list \
+    --account-name <todo> \
+    --resource-group <todo> \
+    --output table
+
+# manually set env vars
+export AZURE_STORAGE_ACCOUNT="<todo>"
+export AZURE_STORAGE_ACCESS_KEY="<todo>"
+
+az storage container create --name tf-state
+````
+see: https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-cli
+
 
 When all preconditions are met, you need to gather the required input variables in a file, e.g. `context.tfvars`. The following variables are **mandatory** to provide:
 
@@ -28,6 +56,11 @@ aad_server_app_id="00000000-0000-0000-0000-000000000000"
 aad_server_app_secret="PatVMovW........WXJyV5fw="
 aad_client_app_id="00000000-0000-0000-0000-000000000000"
 aad_tenant_id="00000000-0000-0000-0000-000000000000"
+
+resource_group_name                     = "<TODO>"
+storage_account_name                    = "<TODO>"
+storage_container_name                  = "tf-state"
+storage_account_primary_access_key      = "<TODO>"
 
 aks_cluster_admins = ["john@contoso.com", "jane@contoso.com"]
 ```
