@@ -139,9 +139,6 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
   }
 }
 
-  #external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
-
-    #public_ip_address_id= "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
 data "azurerm_public_ip" "firewall_data_pip" {
   name                = "${var.external_pip_name == "" ? "${local.prefix_snake}-firewall-pip" : "${var.external_pip_name}"}"
   resource_group_name = "${var.external_pip_resource_group == "" ? "${azurerm_resource_group.rg.name}" : "${var.external_pip_resource_group}"}"
