@@ -11,13 +11,16 @@ metadata:
 spec:
   tls:
   - hosts:
-          - k8s.4711.cloud
-    secretName: grafana-ui-secret
+          - grafana.4711.cloud
+    secretName: grafana-4711-cloud
   rules:
-  - host: k8s.4711.cloud
+  - host: grafana.4711.cloud
     http:
       paths:
       - backend:
           serviceName: grafana
           servicePort: 80
-        path: /grafana
+        path: /
+
+
+
