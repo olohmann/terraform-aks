@@ -273,7 +273,22 @@ grafana.ini:
   log:
     mode: console
   grafana_net:
-    url: https://grafana.net
+   url: https://grafana.net
+
+# auth.generic_oauth:
+#   name: Azure AD
+#   enabled: true
+#   allow_sign_up: true
+#   client_id: <application id>
+#   client_secret: <key value>
+#   scopes: openid email name
+#   auth_url: https://login.microsoftonline.com/<directory id>/oauth2/authorize
+#   token_url: https://login.microsoftonline.com/<directory id>/oauth2/token
+#   api_url:
+#   team_ids:
+#   allowed_organizations:
+
+
 ## LDAP Authentication can be enabled with the following values on grafana.ini
 ## NOTE: Grafana will fail to start if the value for ldap.toml is invalid
   # auth.ldap:
