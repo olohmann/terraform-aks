@@ -1,12 +1,12 @@
-data "azurerm_subscription" "current" {}
+/* data "azurerm_subscription" "current" {}
 
 locals {
   external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
   generated_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.rg.name}/providers/Microsoft.Network/publicIPAddresses/${local.prefix_snake}-firewall-pip}"
 }
+*/
 
 resource "azurerm_public_ip" "firewall_pip" {
-  count               = "${var.external_pip_name == "" ? 1 : 0}"
   name                = "${local.prefix_snake}-firewall-pip"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
@@ -14,6 +14,7 @@ resource "azurerm_public_ip" "firewall_pip" {
   sku                 = "Standard"
   domain_name_label   = "${local.prefix_snake}-${random_id.workspace.hex}"
 }
+
 
 resource "azurerm_firewall" "firewall" {
   name                = "${local.prefix_snake}-firewall"
@@ -23,7 +24,7 @@ resource "azurerm_firewall" "firewall" {
   ip_configuration {
     name                 = "configuration"
     subnet_id            = "${azurerm_subnet.firewall_subnet.id}"
-    public_ip_address_id= "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
+    public_ip_address_id= "${azurerm_public_ip.firewall_pip.id}"
   }
 }
 
@@ -139,19 +140,11 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
   }
 }
 
-  #external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
-
-    #public_ip_address_id= "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
-data "azurerm_public_ip" "firewall_data_pip" {
-  name                = "${var.external_pip_name == "" ? "${local.prefix_snake}-firewall-pip" : "${var.external_pip_name}"}"
-  resource_group_name = "${var.external_pip_resource_group == "" ? "${azurerm_resource_group.rg.name}" : "${var.external_pip_resource_group}"}"
-}
-
 resource "local_file" "firewall_config" {
   content = <<EOF
 azure_firewall_name = "${azurerm_firewall.firewall.name}"
 azure_firewall_resource_group_name = "${azurerm_resource_group.rg.name}"
-azure_firewall_pip = "${data.azurerm_public_ip.firewall_data_pip.ip_address}"
+azure_firewall_pip = "${azurerm_public_ip.firewall_pip.ip_address}"
 EOF
 
   filename = "${path.module}/../04-aks-post-deploy-ingress/${terraform.workspace}_firewall_config.generated.tfvars"

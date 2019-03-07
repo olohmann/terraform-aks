@@ -2,7 +2,7 @@ resource "azurerm_log_analytics_workspace" "la_monitor_containers" {
   name                = "${local.prefix_snake}-${random_id.workspace.hex}"
   location            = "${var.location_log_analytics}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
-  sku                 = "Standard"
+  sku                 = "PerGB2018"
   retention_in_days   = 30
 }
 

@@ -73,3 +73,4 @@ resource "azurerm_subnet" "firewall_subnet" {
   address_prefix       = "${local.firewall_subnet_cidr}"
   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
 }
+
