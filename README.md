@@ -57,10 +57,10 @@ aad_server_app_secret="PatVMovW........WXJyV5fw="
 aad_client_app_id="00000000-0000-0000-0000-000000000000"
 aad_tenant_id="00000000-0000-0000-0000-000000000000"
 
-resource_group_name                     = "<todo>"
-storage_account_name                    = "<todo>"
+resource_group_name                     = "<TODO>"
+storage_account_name                    = "<TODO>"
 storage_container_name                  = "tf-state"
-storage_account_primary_access_key      = "<todo>"
+storage_account_primary_access_key      = "<TODO>"
 
 aks_cluster_admins = ["john@contoso.com", "jane@contoso.com"]
 ```
