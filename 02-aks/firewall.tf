@@ -2,7 +2,7 @@ data "azurerm_subscription" "current" {}
 
 locals {
   external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
-  generated_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.rg.name}/providers/Microsoft.Network/publicIPAddresses/${local.prefix_snake}-firewall-pip}"
+  generated_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.rg.name}/providers/Microsoft.Network/publicIPAddresses/${terraform.workspace}-${var.prefix}-firewall-pip"
 }
 
 resource "azurerm_public_ip" "firewall_pip" {
@@ -23,7 +23,7 @@ resource "azurerm_firewall" "firewall" {
   ip_configuration {
     name                 = "configuration"
     subnet_id            = "${azurerm_subnet.firewall_subnet.id}"
-    public_ip_address_id= "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
+    public_ip_address_id = "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
   }
 }
 
