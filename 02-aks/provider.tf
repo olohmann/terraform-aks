@@ -9,3 +9,7 @@ provider "local" {
 provider "random" {
     version = ">=2.0.0"
 }
+
+provider "null" {
+    version = ">=2.1.0"
+}
