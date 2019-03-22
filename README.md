@@ -13,14 +13,15 @@ Please note that the additional services like Azure Key Vault and Azure Storage 
 
 The easiest way, to start get the whole environment setup and deployed is by running the `apply_all.sh` script. However, first you have to **ensure the following preconditions**:
 
-- [Terraform](https://www.terraform.io/) is installed in the latest version. Check via `terraform version`.
-- [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl) is installed in the latest version. Check via `kubectl version`.
-- [Helm](https://github.com/helm/helm) is installed in the latest version. Check via `helm version`.
-- [Azure CLI (az)](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) is installed in the latest version and points to the correct subscription. Check via `az account list` what is configured as `"isDefault": true`. This is important as due to one missing feature in the Terraform Azure Firewall resource provider, we have to fallback to invoke `az` from Terraform.
-- Create a client and server application registration in Azure Active Directory to support Kubernetes OIDC integration. In short, this allows you to use Azure AD as your identity provider to manage cluster access. Follow [these steps](https://docs.microsoft.com/en-us/azure/aks/aad-integration) and retrieve the required setting information. Hint: You do not need to create multiple of these registration in your environment, but you should hand out individual secrets.
-- Enable the AKS Audit Log **feature flag** in your subscription as described in the *Note* field in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/view-master-logs). **Only register the flag, all actual diagnostic configuration is fully automated during the deployment.**
+1. [Terraform](https://www.terraform.io/) is installed in the latest version. Check via `terraform version`.
+1. [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl) is installed in the latest version. Check via `kubectl version`.
+1. [Helm](https://github.com/helm/helm) is installed in the latest version. Check via `helm version`.
+1. [Azure CLI (az)](https://docs.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) is installed in the latest version and points to the correct subscription. Check via `az account list` what is configured as `"isDefault": true`. This is important as due to one missing feature in the Terraform Azure Firewall resource provider, we have to fallback to invoke `az` from Terraform.
+1. [Azure CLI Firewall Extension](https://docs.microsoft.com/en-us/cli/azure/extension?view=azure-cli-latest#az-extension-add). As mentioned above, in one step we need to fallback to the Azure CLI. Please make sure the Azure Firewall extension is installed: `az extension add --name azure-firewall` or make sure it is up-to-date: `az extension update --name azure-firewall`
+1. Create a client and server application registration in Azure Active Directory to support Kubernetes OIDC integration. In short, this allows you to use Azure AD as your identity provider to manage cluster access. Follow [these steps](https://docs.microsoft.com/en-us/azure/aks/aad-integration) and retrieve the required setting information. Hint: You do not need to create multiple of these registration in your environment, but you should hand out individual secrets.
+1. Enable the AKS Audit Log **feature flag** in your subscription as described in the *Note* field in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/view-master-logs). **Only register the flag, all actual diagnostic configuration is fully automated during the deployment.**
 
-When all preconditions are met, you need to gather the required input variables in a file, e.g. `context.tfvars`. The following variables are **mandatory** to provide:
+When all preconditions are met, you need to gather the required input variables in a file, e.g. `secrets.dev.tfvars`. The following variables are **mandatory** to provide:
 
 ```hcl
 aad_server_app_id="00000000-0000-0000-0000-000000000000"
@@ -57,7 +58,7 @@ The deployment structure is basically divided into two parts. The first part tak
 
     The actual deployment of an AKS cluster, an Azure Firewall, and the baseline network infrastructure.
 
-    > Required Azure RBAC: Subscription *Owner*.
+    > Requires that the executing entity has the Azure RBAC permission *Owner* on the target subscription.
 
 -----------
 
