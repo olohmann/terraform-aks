@@ -1,3 +1,5 @@
 # loki log management
 
-helm install . -n loki --namespace <YOUR-NAMESPACE>
+please follow the instructions here:  
+https://github.com/grafana/loki/tree/master/production/helm
+
