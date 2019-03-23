@@ -20,8 +20,8 @@ locals {
 
 resource "azurerm_application_gateway" "aks_appgw" {
   name                = "${local.prefix_snake}-appgateway"
-  resource_group_name = "${azurerm_resource_group.test.name}"
-  location            = "${azurerm_resource_group.test.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
+  location            = "${azurerm_resource_group.rg.location}"
 
   sku {
     name     = "Standard_Small"
