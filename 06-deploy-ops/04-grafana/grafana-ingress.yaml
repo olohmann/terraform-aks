@@ -4,15 +4,14 @@ kind: Ingress
 metadata:
   annotations:
    kubernetes.io/ingress.class: "nginx"
-   certmanager.k8s.io/issuer: "letsencrypt-staging"
-   certmanager.k8s.io/acme-challenge-type: http01
+   kubernetes.io/tls-acme: 'true'
   name: grafana-ui
   namespace: ops
 spec:
   tls:
   - hosts:
           - grafana.4711.cloud
-    secretName: grafana-4711-cloud
+    secretName: grafana-4711-crt
   rules:
   - host: grafana.4711.cloud
     http:
