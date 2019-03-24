@@ -1,3 +1,4 @@
+/*
 resource "azurerm_public_ip" "appgw_pip" {
   name                = "${local.prefix_snake}-appgw-pip"
   location            = "${azurerm_resource_group.rg.location}"
@@ -30,8 +31,8 @@ resource "azurerm_application_gateway" "aks_appgw" {
   }
 
   gateway_ip_configuration {
-    name      = "my-gateway-ip-configuration"
-    subnet_id = "${azurerm_subnet.frontend.id}"
+    name      = "${local.prefix_snake}-ip-configuration"
+    subnet_id = "${azurerm_subnet.firewall_subnet.id}"
   }
 
   frontend_port {
@@ -41,7 +42,7 @@ resource "azurerm_application_gateway" "aks_appgw" {
 
   frontend_ip_configuration {
     name                 = "${local.frontend_ip_configuration_name}"
-    public_ip_address_id = "${azurerm_public_ip.test.id}"
+    public_ip_address_id = "${azurerm_public_ip.appgw_pip.id}"
   }
 
   backend_address_pool {
@@ -72,3 +73,4 @@ resource "azurerm_application_gateway" "aks_appgw" {
     backend_http_settings_name = "${local.http_setting_name}"
   }
 }
+*/
