@@ -1,0 +1,18 @@
+apiVersion: certmanager.k8s.io/v1alpha1
+kind: Certificate
+metadata:
+  name: grafana-4711
+  namespace: ops
+spec:
+  secretName: grafana-4711-crt
+  dnsNames:
+  - grafana.4711.cloud
+  acme:
+    config:
+    - http01:
+        ingressClass: nginx
+      domains:
+        - grafana.4711.cloud
+  issuerRef:
+    name: letsencrypt-staging
+    kind: ClusterIssuer
