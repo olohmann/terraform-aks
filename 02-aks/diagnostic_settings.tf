@@ -51,13 +51,14 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
     }
   }
 
-  log {
+ /* log {
     category = "guard"
     enabled  = true
     retention_policy {
         enabled = false
     }
   }
+*/
 
   log {
     category = "cluster-autoscaler"

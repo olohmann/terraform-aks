@@ -80,18 +80,19 @@ service:
   labels: {}
 
 ingress:
-  enabled: false
+  enabled: enabled
   annotations: 
   kubernetes.io/ingress.class: nginx
   kubernetes.io/tls-acme: "true"
   certmanager.k8s.io/issuer: "letsencrypt-staging"
-  certmanager.k8s.io/acme-challenge-type: http01  
+  certmanager.k8s.io/acme-challenge-type: http01
+      #
   labels: {}
   path: /
   hosts:
     - grafana.4711.cloud
   tls: 
-    - secretName: grafana-4711-cloud
+    - secretName: grafana-4711-crt
       hosts:
         - grafana.4711.cloud
 
