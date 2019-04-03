@@ -52,6 +52,7 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
   }
 
   log {
+<<<<<<< HEAD
     category = "guard"
     enabled  = true
     retention_policy {
@@ -60,6 +61,8 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
   }
 
   log {
+=======
+>>>>>>> 3f2359b612b977443cf2f5914ff29bed2790831c
     category = "cluster-autoscaler"
     enabled  = false
     retention_policy {
