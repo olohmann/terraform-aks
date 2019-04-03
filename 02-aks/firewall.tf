@@ -2,11 +2,7 @@ data "azurerm_subscription" "current" {}
 
 locals {
   external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
-<<<<<<< HEAD
-  generated_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.rg.name}/providers/Microsoft.Network/publicIPAddresses/${local.prefix_snake}-firewall-pip}"
-=======
   generated_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${azurerm_resource_group.rg.name}/providers/Microsoft.Network/publicIPAddresses/${terraform.workspace}-${var.prefix}-firewall-pip"
->>>>>>> 3f2359b612b977443cf2f5914ff29bed2790831c
 }
 
 resource "azurerm_public_ip" "firewall_pip" {
@@ -27,11 +23,7 @@ resource "azurerm_firewall" "firewall" {
   ip_configuration {
     name                 = "configuration"
     subnet_id            = "${azurerm_subnet.firewall_subnet.id}"
-<<<<<<< HEAD
-    public_ip_address_id= "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
-=======
     public_ip_address_id = "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
->>>>>>> 3f2359b612b977443cf2f5914ff29bed2790831c
   }
 }
 
@@ -147,12 +139,6 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
   }
 }
 
-<<<<<<< HEAD
-  #external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
-
-    #public_ip_address_id= "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
-=======
->>>>>>> 3f2359b612b977443cf2f5914ff29bed2790831c
 data "azurerm_public_ip" "firewall_data_pip" {
   name                = "${var.external_pip_name == "" ? "${local.prefix_snake}-firewall-pip" : "${var.external_pip_name}"}"
   resource_group_name = "${var.external_pip_resource_group == "" ? "${azurerm_resource_group.rg.name}" : "${var.external_pip_resource_group}"}"
