@@ -1,0 +1,25 @@
+{{- if .Values.loki.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "loki.fullname" . }}
+  labels:
+    app: {{ template "loki.name" . }}
+    chart: {{ template "loki.chart" . }}
+    release: {{ .Release.Name }}
+    heritage: {{ .Release.Service }}
+    {{- with .Values.loki.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- toYaml .Values.loki.service.annotations | nindent 4 }}
+spec:
+  ports:
+    - name: http-metrics
+      port: {{ .Values.loki.service.port }}
+      protocol: TCP
+      targetPort: http-metrics
+  selector:
+    app: {{ template "loki.name" . }}
+    release: {{ .Release.Name }}
+{{- end }}
