@@ -103,3 +103,7 @@ az aks get-credentials --resource-group <TODO> --name <TODO> --admin --overwrite
 ```sh
 az aks get-credentials --resource-group <TODO> --name <TODO> --overwrite-existing
 ```
+
+### Useful Links
+
+- [Quick-Start Cert Manager with NGINX Ingress](http://docs.cert-manager.io/en/latest/tutorials/acme/quick-start/index.html)
