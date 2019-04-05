@@ -135,6 +135,9 @@ if [ -z "${e}" ] || [ -z "${p}" ] || [ -z "${v}" ]; then
     usage
 fi
 
+.log 6 "[==== Verify Environment ====]"
+$DIR/check_env.sh
+
 VAR_FILE_PATH=$(get_abs_filename ${v})
 print_subription_context
 
