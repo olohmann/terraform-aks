@@ -18,4 +18,4 @@ jobs:
     vmImage: 'Ubuntu 16.04'
   container: terraformlatest
   steps:
-  - script: 'terraform version'
+  - script: terraform version
