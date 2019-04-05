@@ -1,20 +1,21 @@
 # Azure Pipeline using bash.
 # azure-pipelines.yml
 
-pool:
-  vmImage: 'Ubuntu 16.04'
-resources:
-  containers:
-  - container: terraform-latest
-    image: hashicorp/terraform:latest
-
-
 trigger:
 - master
 
+resources:
+  containers:
+  - container: terraformlatest
+    image: hashicorp/terraform:latest
+
+
 jobs:
-- job: terraform-validate
-  container: terraform-latest
-  failOnStderr: true
+
+- job: terraformvalidate
+  displayName: Terraform Validate
+  pool:
+    vmImage: 'Ubuntu 16.04'
+  container: terraformlatest
   steps:
-  - script: 'terraform init && terraform validate'
+  - script: 'terraform version'
