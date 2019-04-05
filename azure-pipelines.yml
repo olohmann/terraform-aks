@@ -7,7 +7,7 @@ trigger:
 resources:
   containers:
   - container: terraformlatest
-    image: hashicorp/terraform:latest
+    image: ubuntu:latest
 
 
 jobs:
