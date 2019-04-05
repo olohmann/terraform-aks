@@ -1,5 +1,10 @@
 locals {
   prefix_snake = "${var.prefix}"
+  ip_rules = "${length(var.network_access_rules) > 0 ? join(",", var.network_access_rules) : chomp(data.http.myip.body)}"
+}
+
+data "http" "myip" {
+  url = "https://api.ipify.org/"
 }
  
 resource "azurerm_resource_group" "rg" {
@@ -21,7 +26,7 @@ resource "azurerm_storage_account" "sa" {
   access_tier  = "Hot"
 
   network_rules {
-      ip_rules = ["${var.network_access_rules}"]
+      ip_rules = ["${split(",", local.ip_rules)}"]
   }
 }
 
