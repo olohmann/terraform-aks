@@ -1,22 +1,15 @@
 # Azure Pipeline using bash.
 # azure-pipelines.yml
 
+pool:
+  vmImage: 'Ubuntu 16.04'
+
 trigger:
 - master
 
-resources:
-  containers:
-  - container: terraformlatest
-    image: azpipelinetf.azurecr.io/azure-pipeline-tf:cb1
-
-
 jobs:
-
-- job: terraformvalidate
-  displayName: Terraform Validate
-  pool:
-    vmImage: 'Ubuntu 16.04'
-  container: terraformlatest
-  steps:
-  - script: |
-      terraform version
+ - bash: 'terraform init && terraform validate -input=false'
+   workingDirectory: $(Build.SourcesDirectory)
+   displayName: terraform-validate
+   failOnStderr: true
+   # env:  # mapping of environment variables to add
