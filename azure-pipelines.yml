@@ -7,9 +7,8 @@ pool:
 trigger:
 - master
 
-jobs:
- - bash: 'terraform init && terraform validate -input=false'
-   workingDirectory: $(Build.SourcesDirectory)
-   displayName: terraform-validate
-   failOnStderr: true
-   # env:  # mapping of environment variables to add
+- bash: 'terraform init && terraform validate -input=false'
+  workingDirectory: $(Build.SourcesDirectory)
+  displayName: terraform-validate
+  failOnStderr: true
+  # env:  # mapping of environment variables to add
