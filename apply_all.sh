@@ -10,6 +10,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 # ------------------------------------------------------------------
 # Logging
 declare -A LOG_LEVELS
+
 LOG_LEVELS=([0]="emerg" [1]="alert" [2]="crit" [3]="err" [4]="warning" [5]="notice" [6]="info" [7]="debug")
 function .log () {
   local LEVEL=${1}
@@ -31,7 +32,7 @@ get_abs_filename() {
 }
 
 usage() {
-    echo "Usage: $0 [-e <environment_string>] [-p <prefix_string>] [-v vars_file] [-i (interactive flag)]" 1>&2; exit 1;
+    echo "Usage: $0 [-e <environment_string>] [-p <prefix_string>] [-v vars_file] [-f (force flag)]" 1>&2; exit 1;
 }
 
 print_subription_context() {
@@ -41,15 +42,15 @@ print_subription_context() {
     CURRENT_SUBSCRIPTION_NAME=$(az account list --all --query "[?isDefault].name | [0]" | tr -d '"')
 
     echo -e "${GREEN}[NOTE]${NC} Subscription Context: ${GREEN}${CURRENT_SUBSCRIPTION_NAME} (${CURRENT_SUBSCRIPTION_ID})${NC}"
-    if [ "${i}" = true ]; then
+    if [ "${f}" = true ]; then
+        echo "Using ${CURRENT_SUBSCRIPTION_NAME} ($CURRENT_SUBSCRIPTION_ID)"
+    else
         read -p "Continue with subscription (y/n)? " CONT
         if [ "$CONT" = "y" ]; then
             echo "Using ${CURRENT_SUBSCRIPTION_NAME} ($CURRENT_SUBSCRIPTION_ID)"
         else
             exit 1
         fi
-    else
-        echo ""
     fi
 }
 
@@ -91,7 +92,9 @@ run_terraform() {
         fi
     fi
 
-    if [ "${i}" = true ]; then
+    if [ "${f}" = true ]; then
+        terraform plan -out=terraform.tfplan -var-file=${RT_VAR_FILE_PATH} -var "prefix=${RT_PREFIX}" $(echo -n ${RT_VAR_FILE_SPECIAL_ARGS}) && terraform apply terraform.tfplan
+    else
         terraform plan -out=terraform.tfplan -var-file=${RT_VAR_FILE_PATH} -var "prefix=${RT_PREFIX}" $(echo -n ${RT_VAR_FILE_SPECIAL_ARGS})
         read -p "Continue with terraform apply (y/n)? " CONT
         if [ "$CONT" = "y" ]; then
@@ -99,8 +102,6 @@ run_terraform() {
         else
             exit 1
         fi
-    else
-        terraform plan -out=terraform.tfplan -var-file=${RT_VAR_FILE_PATH} -var "prefix=${RT_PREFIX}" $(echo -n ${RT_VAR_FILE_SPECIAL_ARGS}) && terraform apply terraform.tfplan
     fi
     popd
 }
@@ -108,9 +109,9 @@ run_terraform() {
 e=""
 p=""
 v=""
-i=false
+f=false
 
-while getopts ":e:v:p:i" o; do
+while getopts ":e:v:p:f" o; do
     case "${o}" in
         e)
             e=${OPTARG}
@@ -121,7 +122,7 @@ while getopts ":e:v:p:i" o; do
         v)
             v=${OPTARG}
             ;;
-        i)  i=true
+        f)  f=true
             ;;
         *)
             usage
