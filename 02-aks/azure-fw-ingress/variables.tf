@@ -10,7 +10,6 @@ variable "external_pip_resource_group" {
   default = ""
 }
 
-
 variable "vnet_cidr" {
   type = "string"
   description = "The VNET CIDR of the AKS Cluster"
@@ -20,12 +19,10 @@ variable "vnet_address_space" {
   type = "list"
 }
 
-
 variable "firewall_subnet_cidr" {
     type = "string"
     description = "Set CIDR Range for the Azure Firewall Subnet"
     default = "10.0.240.0/24"
-
 }
 
 variable "resource_group" {
@@ -39,12 +36,10 @@ variable "resource_group_location" {
 }
 
 variable "la_monitor_containers_workspace_id" {
-  
+description = "Parent Log Analytics Workspace ID"  
 }
-
 
 variable "workspace_random_id" {
   type = "string"
-  description = "the Random ID of the Terraform AKS Deployment"
-  
+  description = "the random ID of the Terraform AKS Deployment" 
 }

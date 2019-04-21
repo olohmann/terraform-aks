@@ -177,3 +177,34 @@ resource "azurerm_route_table" "aks_subnet_rt" {
   }
 
 }
+
+resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
+  name               = "firewall_diagnostics"
+  target_resource_id = "${azurerm_firewall.firewall.id}"
+  log_analytics_workspace_id = "${var.la_monitor_containers_workspace_id}"
+
+  log {
+    category = "AzureFirewallApplicationRule"
+    enabled  = true
+    retention_policy {
+        enabled = false
+    }
+  }
+
+  log {
+    category = "AzureFirewallNetworkRule"
+    enabled  = true
+    retention_policy {
+        enabled = false
+    }
+  }
+
+  metric {
+    category = "AllMetrics"
+    enabled = false
+    
+    retention_policy {
+      enabled = false
+    }
+  }
+}
