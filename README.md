@@ -13,7 +13,6 @@ Please note that the additional services like Azure Key Vault and Azure Storage 
 
 The easiest way, to start get the whole environment setup and deployed is by running the `apply_all.sh` script. However, first you have to **ensure the following preconditions**:
 
-<<<<<<< HEAD
 - [Terraform](https://www.terraform.io/) is installed in the latest version. Check via `terraform version`.
 - [Kubectl](https://kubernetes.io/docs/tasks/tools/install-kubectl/#install-kubectl) is installed in the latest version. Check via `kubectl version`.
 - [Helm](https://github.com/helm/helm) is installed in the latest version. Check via `helm version`.
@@ -61,7 +60,6 @@ When all preconditions are met, you need to gather the required input variables 
 1. Enable the AKS Audit Log **feature flag** in your subscription as described in the *Note* field in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/view-master-logs). **Only register the flag, all actual diagnostic configuration is fully automated during the deployment.**
 
 When all preconditions are met, you need to gather the required input variables in a file, e.g. `secrets.dev.tfvars`. The following variables are **mandatory** to provide:
->>>>>>> 3f2359b612b977443cf2f5914ff29bed2790831c
 
 ```hcl
 aad_server_app_id="00000000-0000-0000-0000-000000000000"
@@ -103,11 +101,8 @@ The deployment structure is basically divided into two parts. The first part tak
 
     The actual deployment of an AKS cluster, an Azure Firewall, and the baseline network infrastructure.
 
-<<<<<<< HEAD
     > Required Azure RBAC: Subscription *Owner*.
-=======
     > Requires that the executing entity has the Azure RBAC permission *Owner* on the target subscription.
->>>>>>> 3f2359b612b977443cf2f5914ff29bed2790831c
 
 -----------
 
