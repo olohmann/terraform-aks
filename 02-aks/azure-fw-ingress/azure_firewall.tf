@@ -51,8 +51,8 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
     target_fqdns = [
       "*.blob.core.windows.net",
       "*.cdn.mscr.io",
-      "*.${local.location}.azmk8s.io",
-      "*.hcp.${local.location}.azmk8s.io",
+      "*.${var.resource_group_location}.azmk8s.io",
+      "*.hcp.${var.resource_group_location}.azmk8s.io",
       "${var.la_monitor_containers_workspace_id}.ods.opinsights.azure.com",
       "${var.la_monitor_containers_workspace_id}.oms.opinsights.azure.com",
       "api.snapcraft.io",
