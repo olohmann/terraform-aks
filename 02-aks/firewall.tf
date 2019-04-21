@@ -1,4 +1,4 @@
-data "azurerm_subscription" "current" {}
+/* data "azurerm_subscription" "current" {}
 
 locals {
   external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
@@ -153,3 +153,4 @@ EOF
 
   filename = "${path.module}/../04-aks-post-deploy-ingress/${terraform.workspace}_firewall_config.generated.tfvars"
 }
+*/

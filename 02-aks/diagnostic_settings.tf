@@ -1,3 +1,4 @@
+/*
 resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
   name               = "firewall_diagnostics"
   target_resource_id = "${azurerm_firewall.firewall.id}"
@@ -28,6 +29,7 @@ resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
     }
   }
 }
+*/
 
 
 resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
@@ -51,8 +53,6 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
     }
   }
 
-  log {
-=======
  /* log {
     category = "guard"
     enabled  = true
@@ -63,7 +63,6 @@ resource "azurerm_monitor_diagnostic_setting" "aks_diagnostics" {
 */
 
   log {
-=======
     category = "cluster-autoscaler"
     enabled  = false
     retention_policy {

@@ -40,18 +40,21 @@ resource "azurerm_virtual_network" "vnet" {
 }
 
 # Route Table: AKS Subnet -> Azure Firewall
+
 resource "azurerm_route_table" "aks_subnet_rt" {
   name                = "${local.prefix_snake}-default-route"
   location            = "${azurerm_resource_group.rg.location}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
 
-  route {
+  /* route {
     name                   = "default"
     address_prefix         = "0.0.0.0/0"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "${azurerm_firewall.firewall.ip_configuration.0.private_ip_address}"
   }
+*/
 }
+
 
 resource "azurerm_subnet" "aks_subnet" {
   name                 = "aks_subnet"
