@@ -49,3 +49,7 @@ variable "prefix" {
   description = "A prefix used for all resources in this example" 
 }
 
+variable "prefix_snake" {
+  type = "string"
+  description = "A prefix used for all resources in this example" 
+}

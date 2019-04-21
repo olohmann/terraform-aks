@@ -5,26 +5,27 @@ locals {
   generated_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group}/providers/Microsoft.Network/publicIPAddresses/${terraform.workspace}-${var.prefix}-firewall-pip"
 }
 
+
 resource "azurerm_public_ip" "firewall_pip" {
   count               = "${var.external_pip_name == "" ? 1 : 0}"
-  name                = "${local.prefix_snake}-firewall-pip"
+  name                = "${var.prefix_snake}-firewall-pip"
   location            = "${var.resource_group_location}"
   resource_group_name = "${var.resource_group}"
   allocation_method   = "Static"
   sku                 = "Standard"
-  domain_name_label   = "${local.prefix_snake}-${var.workspace_random_id}"
+  domain_name_label   = "${var.prefix_snake}-${var.workspace_random_id}"
 }
 
 # Subnet Calc: 10.0.10.0/24 -> IP Range: 10.0.10.1 - 10.0.10.254
 resource "azurerm_subnet" "firewall_subnet" {
   name                 = "AzureFirewallSubnet"
   resource_group_name  = "${var.resource_group}"
-  address_prefix       = "${local.firewall_subnet_cidr}"
+  address_prefix       = "${var.firewall_subnet_cidr}"
   virtual_network_name = "${var.vnet_cidr}"
 }
 
 resource "azurerm_firewall" "firewall" {
-  name                = "${local.prefix_snake}-firewall"
+  name                = "${var.prefix_snake}-firewall"
   location            = "${var.resource_group_location}"
   resource_group_name = "${var.resource_group}"
 
@@ -36,7 +37,7 @@ resource "azurerm_firewall" "firewall" {
 }
 
 resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
-  name                = "${local.prefix_snake}-aks-egress"
+  name                = "${var.prefix_snake}-aks-egress"
   azure_firewall_name = "${azurerm_firewall.firewall.name}"
   resource_group_name = "${var.resource_group}"
   priority            = 100
@@ -148,7 +149,7 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
 }
 
 data "azurerm_public_ip" "firewall_data_pip" {
-  name                = "${var.external_pip_name == "" ? "${local.prefix_snake}-firewall-pip" : "${var.external_pip_name}"}"
+  name                = "${var.external_pip_name == "" ? "${var.prefix_snake}-firewall-pip" : "${var.external_pip_name}"}"
   resource_group_name = "${var.external_pip_resource_group == "" ? "${var.resource_group}" : "${var.external_pip_resource_group}"}"
 }
 
@@ -165,7 +166,7 @@ EOF
 # Route Table: AKS Subnet -> Azure Firewall
 
 resource "azurerm_route_table" "aks_subnet_rt" {
-  name                = "${local.prefix_snake}-default-route"
+  name                = "${var.prefix_snake}-default-route"
   location            = "${var.resource_group_location}"
   resource_group_name = "${var.resource_group}"
 
