@@ -7,7 +7,7 @@ locals {
   # aks            10.0.0.0/20 -> IP Range: 10.0.0.1 - 10.0.15.254
   # aks services   10.1.0.0/20 -> IP Range: 10.1.0.1 - 10.1.15.254
   # docker bridge  172.17.0.1/16
-  # firewall        10.0.240.0/24 -> IP Range: 10.0.240.1 - 10.0.240.254
+  # firewall       10.0.240.0/24 -> IP Range: 10.0.240.1 - 10.0.240.254
   # app gw         10.0.242.0/24 -> IP Range: 10.0.242.1 - 10.0.242.254
   vnet_cidr              = "10.0.0.0/16"
   aks_subnet_cidr        = "10.0.0.0/20"
@@ -39,21 +39,6 @@ resource "azurerm_virtual_network" "vnet" {
 
 }
 
-# Route Table: AKS Subnet -> Azure Firewall
-
-resource "azurerm_route_table" "aks_subnet_rt" {
-  name                = "${local.prefix_snake}-default-route"
-  location            = "${azurerm_resource_group.rg.location}"
-  resource_group_name = "${azurerm_resource_group.rg.name}"
-
-  /* route {
-    name                   = "default"
-    address_prefix         = "0.0.0.0/0"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "${azurerm_firewall.firewall.ip_configuration.0.private_ip_address}"
-  }
-*/
-}
 
 
 resource "azurerm_subnet" "aks_subnet" {
@@ -69,11 +54,5 @@ resource "azurerm_subnet_route_table_association" "rt_association" {
   route_table_id = "${azurerm_route_table.aks_subnet_rt.id}"
 }
 
-# Subnet Calc: 10.0.10.0/24 -> IP Range: 10.0.10.1 - 10.0.10.254
-resource "azurerm_subnet" "firewall_subnet" {
-  name                 = "AzureFirewallSubnet"
-  resource_group_name  = "${azurerm_resource_group.rg.name}"
-  address_prefix       = "${local.firewall_subnet_cidr}"
-  virtual_network_name = "${azurerm_virtual_network.vnet.name}"
-}
+
 
