@@ -43,3 +43,9 @@ variable "workspace_random_id" {
   type = "string"
   description = "the random ID of the Terraform AKS Deployment" 
 }
+
+variable "prefix" {
+  type = "string"
+  description = "A prefix used for all resources in this example" 
+}
+
