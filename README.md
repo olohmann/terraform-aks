@@ -103,3 +103,7 @@ az aks get-credentials --resource-group <TODO> --name <TODO> --overwrite-existin
 ### Useful Links
 
 - [Quick-Start Cert Manager with NGINX Ingress](http://docs.cert-manager.io/en/latest/tutorials/acme/quick-start/index.html)
+
+## Acknowledgements
+
+Big thanks to [Darius Tehrani](https://github.com/dariustehrani/) for lots of feedback and input!
