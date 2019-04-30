@@ -12,7 +12,7 @@ resource "azurerm_public_ip" "firewall_pip" {
   resource_group_name = "${azurerm_resource_group.rg.name}"
   allocation_method   = "Static"
   sku                 = "Standard"
-  domain_name_label   = "${local.prefix_snake}-${random_id.workspace.hex}"
+  domain_name_label   = "${local.prefix_snake}-${local.hash_suffix}"
 }
 
 resource "azurerm_firewall" "firewall" {
@@ -137,19 +137,4 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
       "TCP"
     ]
   }
-}
-
-data "azurerm_public_ip" "firewall_data_pip" {
-  name                = "${var.external_pip_name == "" ? "${local.prefix_snake}-firewall-pip" : "${var.external_pip_name}"}"
-  resource_group_name = "${var.external_pip_resource_group == "" ? "${azurerm_resource_group.rg.name}" : "${var.external_pip_resource_group}"}"
-}
-
-resource "local_file" "firewall_config" {
-  content = <<EOF
-azure_firewall_name = "${azurerm_firewall.firewall.name}"
-azure_firewall_resource_group_name = "${azurerm_resource_group.rg.name}"
-azure_firewall_pip = "${data.azurerm_public_ip.firewall_data_pip.ip_address}"
-EOF
-
-  filename = "${path.module}/../04-aks-post-deploy-ingress/${terraform.workspace}_firewall_config.generated.tfvars"
 }

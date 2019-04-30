@@ -1,8 +1,8 @@
 resource "random_uuid" "aks_sp_password" {}
 
 locals {
-  aks_sp = "${terraform.workspace}-${var.prefix}-aks-sp"
-  aks_aad_sp = "${terraform.workspace}-${var.prefix}-aks-aad-sp"
+  aks_sp = "${lower("${terraform.workspace}-${var.prefix}-aks-sp")}"
+  aks_aad_sp = "${lower("${terraform.workspace}-${var.prefix}-aks-aad-sp")}"
   aks_sp_password = "${random_uuid.aks_sp_password.result}"
 }
 

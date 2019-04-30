@@ -1,4 +1,6 @@
 .helm
+.helm*
+.kube
 
 *.tfvars
 *.generated.*

@@ -9,3 +9,7 @@ provider "azuread" {
 provider "random" {
     version = "~>2.0.0"
 }
+
+provider "local" {
+    version = "~>1.2.0"
+}

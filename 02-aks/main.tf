@@ -1,7 +1,12 @@
 locals {
-  prefix_snake = "${terraform.workspace}-${var.prefix}"
-  prefix_flat = "${terraform.workspace}${var.prefix}"
+  prefix_snake = "${lower("${terraform.workspace}-${var.prefix}")}"
+  prefix_flat = "${lower("${terraform.workspace}${var.prefix}")}"
   location = "${lower(replace(var.location, " ", ""))}"
+
+  // The idea of this hash value is to use it as a pseudo-random suffix for
+  // resources with domain names. It will stay constant over re-deployments
+  // per individual resource group. 
+  hash_suffix = "${substr(sha256(azurerm_resource_group.rg.id), 0, 6)}"
 
   # vnet           10.0.0.0/16 -> IP Range: 10.0.0.1 - 10.0.255.254
   # aks            10.0.0.0/20 -> IP Range: 10.0.0.1 - 10.0.15.254
@@ -15,15 +20,6 @@ locals {
   aks_dns_service_ip     = "10.1.0.10"
   docker_bridge_cidr     = "172.17.0.1/16"
   firewall_subnet_cidr   = "10.0.240.0/24"
-}
-
-resource "random_id" "workspace" {
-  keepers = {
-    # Generate a new id each time we switch to a new resource group
-    group_name = "${azurerm_resource_group.rg.name}"
-  }
-
-  byte_length = 4
 }
 
 resource "azurerm_resource_group" "rg" {
