@@ -1,3 +1,5 @@
+variable depends_on { default = [], type = "list"}
+
 module "azure-fw" {
   source = "./azure-fw"
   resource_group = "${azurerm_resource_group.rg.name}"
@@ -14,6 +16,11 @@ module "azure-fw" {
 
 module "azure-fw-ingress" {
   source = "./azure-fw-ingress"
+  
+  depends_on = [
+        "${azurerm_kubernetes_cluster.aks}"
+    ]
+
   ingress_namespace = "default"
   azure_firewall_name = "${local.prefix_snake}-firewall"
   resource_group = "${azurerm_resource_group.rg.name}"
