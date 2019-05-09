@@ -13,7 +13,7 @@ variable "resource_group" {
 }
 
 variable "azure_firewall_pip" {
-  type = "string" 
+  type = "list" 
   description = "Public IP Address of the Azure Firewall. Required to configure the DNat settings for the ingress controller."
 }
 
