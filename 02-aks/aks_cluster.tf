@@ -37,7 +37,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   }
 
   service_principal {
-    client_id     = "${azuread_service_principal.aks_app_sp.client_id}"
+    client_id     = "${azuread_service_principal.aks_app_sp.id}"
     client_secret = "${local.aks_sp_password}"
   }
 
