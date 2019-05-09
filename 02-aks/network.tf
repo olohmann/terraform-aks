@@ -15,6 +15,6 @@ resource "azurerm_subnet" "aks_subnet" {
 
 resource "azurerm_subnet_route_table_association" "rt_association" {
   subnet_id      = "${azurerm_subnet.aks_subnet.id}"
-  route_table_id = "${module.azure-fw-ingress.aks-subnet-rt-id}"
+  route_table_id = "${module.azure-fw.aks-subnet-rt-id}"
   depends_on = ["azurerm_subnet.aks_subnet"]
 }

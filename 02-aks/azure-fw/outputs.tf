@@ -3,5 +3,5 @@ output "aks-subnet-rt-id" {
 }
 
 output "azure-firewall-pip" {
-  value = "${azurerm_public_ip.firewall_pip.ip_address}"
+  value = "${azurerm_public_ip.firewall_pip.*.ip_address}"
 }
