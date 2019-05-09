@@ -29,16 +29,16 @@ resource "azurerm_kubernetes_cluster" "aks" {
     azure_active_directory {
       client_app_id = "${var.aad_client_app_id}"
       
-      server_app_id     = "${var.aad_server_app_id}"
-      server_app_secret = "${var.aad_server_app_secret}"
+      server_app_id     = "${azuread_application.aad_server.application_id}"
+      server_app_secret = "${local.aks_aad_server_password}"
 
       tenant_id = "${var.aad_tenant_id}"
     }
   }
 
   service_principal {
-    client_id     = "${var.aks_cluster_sp_app_id}"
-    client_secret = "${var.aks_cluster_sp_secret}"
+    client_id     = "${azuread_service_principal.aks_app_sp.client_id}"
+    client_secret = "${local.aks_sp_password}"
   }
 
   network_profile {

@@ -40,16 +40,18 @@ variable "aks_cluster_sp_secret" {
   description = "The Client Secret for the Service Principal to use for this Managed Kubernetes Cluster"
 }
 
+/*
 variable "aad_server_app_id" {
   description = "The server app ID for the AAD AKS auth integration."
 }
 variable "aad_server_app_secret" {
   description = "The server secret for the AAD AKS auth integration."
 }
-
+*/ 
 variable "aad_client_app_id" {
   description = "The client app ID for the AAD AKS auth integration."
 }
+
 
 variable "aad_tenant_id" {
   description = "The AAD tenant ID for the AAD AKS auth integration."
