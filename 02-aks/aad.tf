@@ -36,8 +36,8 @@ resource "azuread_service_principal_password" "aks_app_sp_password" {
 resource "azuread_application" "aad_server" {
   name                       = "${local.aks_aad_server_sp}"
   homepage                   = "https://localhost"
-  identifier_uris            = ["http://${aks_aad_server_sp}"]
-  reply_urls                 = ["http://${aks_aad_server_sp}"]
+  identifier_uris            = ["http://${local.aks_aad_server_sp}"]
+  reply_urls                 = ["http://${local.aks_aad_server_sp}"]
   available_to_other_tenants = false
   oauth2_allow_implicit_flow = false
 
@@ -63,7 +63,7 @@ resource "azuread_service_principal" "aks_aad_server_sp" {
 }
 
 resource "azuread_service_principal_password" "aks_aad_server_sp_password" {
-  service_principal_id = "${azuread_service_principal.aks_aad_server_sp.id}"
+  service_principal_id = "${azuread_service_principal.aks_aad_server_sp.service_principal_id}"
   value                = "${local.aks_aad_server_password}"
   end_date             = "2022-01-01T00:00:00Z"
 }
