@@ -7,8 +7,8 @@ module "azure-fw-ingress" {
   vnet_cidr = "${local.vnet_cidr}"
   vnet_name = "${azurerm_virtual_network.vnet.name}"
   vnet_address_space = ["${azurerm_virtual_network.vnet.address_space.0}"]
-  firewall_subnet_cidr = "${local.aks_subnet_cidr}"
-  la_monitor_containers_workspace_id = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
+  firewall_subnet_cidr = "${local.firewall_subnet_cidr}"
+  la_monitor_containers_workspace_id = "${azurerm_log_analytics_workspace.la_monitor_containers.workspace_id}"
   workspace_random_id = "${random_id.workspace.hex}"
 }
 
