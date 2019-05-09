@@ -4,7 +4,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix          = "${local.prefix_snake}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   kubernetes_version  = "${var.aks_kubernetes_version}"
-  depends_on          = ["azuread_service_principal.aks_app_sp", "azuread_service_principal.aks_aad_server_sp"]
+  depends_on          = ["azuread_application.aks_app", "azuread_application.aad_server"]
   linux_profile {
     admin_username = "azureuser"
 
@@ -29,15 +29,15 @@ resource "azurerm_kubernetes_cluster" "aks" {
     azure_active_directory {
       client_app_id = "${var.aad_client_app_id}"
       
-      server_app_id     = "${azuread_service_principal.aks_aad_server_sp.id}"
-      server_app_secret = "${local.aks_aad_server_password}"
+      server_app_id     = "${azuread_application.aad_server.application_id}"
+      server_app_secret = "${local.aks_sp_password}"
 
       tenant_id = "${var.aad_tenant_id}"
     }
   }
 
   service_principal {
-    client_id     = "${azuread_service_principal.aks_app_sp.id}"
+    client_id     = "${azuread_application.aks_app.application_id}"
     client_secret = "${local.aks_sp_password}"
   }
 
