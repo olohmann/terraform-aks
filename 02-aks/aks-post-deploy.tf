@@ -1,6 +1,6 @@
 resource "kubernetes_cluster_role_binding" "cluster_admins_rb" {
     count = "${length(var.aks_cluster_admins)}"
-    depends_on = ["${azurerm_kubernetes_cluster.aks}"]
+    depends_on = ["azurerm_kubernetes_cluster.aks"]
     metadata {
         name = "cluster-admins-${count.index}"
     }
@@ -17,7 +17,7 @@ resource "kubernetes_cluster_role_binding" "cluster_admins_rb" {
 }
 
 resource "kubernetes_service_account" "tiller_sa" {
-   depends_on = ["${azurerm_kubernetes_cluster.aks}"]
+   depends_on = ["azurerm_kubernetes_cluster.aks"]
 
   metadata {
     name = "tiller-sa"
@@ -26,7 +26,7 @@ resource "kubernetes_service_account" "tiller_sa" {
 }
 
 resource "kubernetes_cluster_role_binding" "tiller_sa_cluster_admin_rb" {
-    depends_on = ["${azurerm_kubernetes_cluster.aks}"]
+    depends_on = ["azurerm_kubernetes_cluster.aks"]
 
     metadata {
         name = "tiller-cluster-role"

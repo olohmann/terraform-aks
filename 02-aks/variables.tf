@@ -28,27 +28,6 @@ variable "aks_vm_count" {
   description = "Number of nodes in node pool."
 }
 
-/*
-variable "aks_cluster_sp_app_id" {
-  description = "The Application ID for the Service Principal to use for this Managed Kubernetes Cluster"
-}
-
-variable "aks_cluster_sp_object_id" {
-  description = "The Object ID for the Service Principal to use for this Managed Kubernetes Cluster"
-}
-
-variable "aks_cluster_sp_secret" {
-  description = "The Client Secret for the Service Principal to use for this Managed Kubernetes Cluster"
-}
-
-
-variable "aad_server_app_id" {
-  description = "The server app ID for the AAD AKS auth integration."
-}
-variable "aad_server_app_secret" {
-  description = "The server secret for the AAD AKS auth integration."
-}
-*/ 
 variable "aad_client_app_id" {
   description = "The client app ID for the AAD AKS auth integration."
 }
@@ -84,4 +63,9 @@ variable "external_pip_resource_group" {
   type = "string"
   description = "If configured, the Azure Firewall resource will reference the externally create Puplic IP instead of creating a new one."
   default = ""
+}
+
+variable "aks_cluster_admins" {
+  type = "list"
+  description = "The TBD cluster-admins for the Kubernetes cluster."
 }
