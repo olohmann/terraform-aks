@@ -144,8 +144,9 @@ print_subription_context
 .log 6 "[==== 00 Terraform Backend State ====]"
 run_terraform true ${e} ${p} "00-tf-backend" ${VAR_FILE_PATH} ""
 
-.log 6 "[==== 01 Service Principals for AKS ====]"
-run_terraform false ${e} ${p} "01-env" ${VAR_FILE_PATH} ""
+#
+#.log 6 "[==== 01 Service Principals for AKS ====]"
+#run_terraform false ${e} ${p} "01-env" ${VAR_FILE_PATH} ""
 
 .log 6 "[==== 02 AKS Resources ====]"
 run_terraform false ${e} ${p} "02-aks" ${VAR_FILE_PATH} "-var-file=./${e}_aks_cluster_sp.generated.tfvars"

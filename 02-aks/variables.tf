@@ -28,6 +28,7 @@ variable "aks_vm_count" {
   description = "Number of nodes in node pool."
 }
 
+/*
 variable "aks_cluster_sp_app_id" {
   description = "The Application ID for the Service Principal to use for this Managed Kubernetes Cluster"
 }
@@ -40,7 +41,7 @@ variable "aks_cluster_sp_secret" {
   description = "The Client Secret for the Service Principal to use for this Managed Kubernetes Cluster"
 }
 
-/*
+
 variable "aad_server_app_id" {
   description = "The server app ID for the AAD AKS auth integration."
 }

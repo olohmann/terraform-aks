@@ -52,6 +52,6 @@ clientApplicationId=$(az ad app create \
 az ad sp create --id $clientApplicationId
 oAuthPermissionId=$(az ad app show --id $serverApplicationId --query "oauth2Permissions[0].id" -o tsv)
 
-az ad app permission add --id $clientApplicationId --api $serverApplicationId --api-permissions $oAuthPermissionId=Scope
-az ad app permission grant --id $clientApplicationId --api $serverApplicationId
+#az ad app permission add --id $clientApplicationId --api $serverApplicationId --api-permissions $oAuthPermissionId=Scope
+#az ad app permission grant --id $clientApplicationId --api $serverApplicationId
 echo "Done."
