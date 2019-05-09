@@ -45,10 +45,6 @@ variable "la_monitor_containers_workspace_id" {
 description = "Parent Log Analytics Workspace ID"  
 }
 
-variable "la_monitor_containers_workspace_name" {
-description = "Parent Log Analytics Workspace Name"  
-}
-
 variable "workspace_random_id" {
   type = "string"
   description = "the random ID of the Terraform AKS Deployment" 
