@@ -61,7 +61,7 @@ run_terraform() {
 
     RT_MODULE=$4
     RT_VAR_FILE_PATH=$5
-    RT_VAR_FILE_SPECIAL_ARGS=$6
+    # RT_VAR_FILE_SPECIAL_ARGS=$6
 
     pushd $DIR
     cd $(echo -n "${DIR}/${RT_MODULE}")
