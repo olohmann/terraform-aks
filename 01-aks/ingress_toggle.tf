@@ -1,5 +1,3 @@
-variable depends_on { default = [], type = "list"}
-
 module "azure-fw" {
   source = "./azure-fw"
   resource_group = "${azurerm_resource_group.rg.name}"

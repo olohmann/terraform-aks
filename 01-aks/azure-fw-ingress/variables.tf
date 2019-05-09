@@ -1,3 +1,6 @@
+variable depends_on { 
+  default = [], type = "list"}
+
 variable "ingress_namespace" {
   type = "string"
   default = "default"
