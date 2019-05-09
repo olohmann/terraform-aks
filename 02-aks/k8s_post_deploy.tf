@@ -43,3 +43,33 @@ resource "kubernetes_cluster_role_binding" "tiller_sa_cluster_admin_rb" {
         api_group = ""
     }
 }
+
+resource "kubernetes_namespace" "ops" {
+    depends_on = ["azurerm_kubernetes_cluster.aks"]
+  metadata {
+    annotations {
+      name = "ops-namespace"
+    }
+
+    labels {
+      purpose = "operations"
+    }
+
+    name = "ops"
+  }
+}
+
+resource "kubernetes_namespace" "ops" {
+    depends_on = ["azurerm_kubernetes_cluster.aks"]
+  metadata {
+    annotations {
+      name = "ops-namespace"
+    }
+
+    labels {
+      purpose = "operations"
+    }
+
+    name = "ops"
+  }
+}
