@@ -40,21 +40,6 @@ resource "azuread_application" "aad_server" {
   reply_urls                 = ["http://${local.aks_aad_server_sp}"]
   available_to_other_tenants = false
   oauth2_allow_implicit_flow = false
-  required_resource_access {
-    resource_app_id = "00000003-0000-0000-c000-000000000000"
-    resource_access {
-      id = "e1fe6dd8-ba31-4d61-89e7-88639da4683d"
-      type = "Scope"
-    }
-    resource_access {
-      id = "06da0dbc-49e2-44d2-8312-53f166ab848a"
-      type = "Scope"
-    }
-    resource_access {
-      id = "7ab1d382-f21e-4acd-a863-ba3e13f7da61"
-      type = "Role"
-    }
-}
 }
 
 resource "azuread_service_principal" "aks_aad_server_sp" {
