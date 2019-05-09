@@ -145,6 +145,6 @@ print_subription_context
 run_terraform true ${e} ${p} "00-tf-backend" ${VAR_FILE_PATH} ""
 
 .log 6 "[==== 01 AKS Resources ====]"
-run_terraform false ${e} ${p} "02-aks" ${VAR_FILE_PATH} ""
+run_terraform false ${e} ${p} "01-aks" ${VAR_FILE_PATH} ""
 
 .log 6 "[==== Done. ====]"
