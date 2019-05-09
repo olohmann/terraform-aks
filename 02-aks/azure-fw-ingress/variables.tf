@@ -19,6 +19,12 @@ variable "vnet_address_space" {
   type = "list"
 }
 
+variable "vnet_name" {
+  type = "string"
+  description = "name of the parent vnet"
+}
+
+
 variable "firewall_subnet_cidr" {
     type = "string"
     description = "Set CIDR Range for the Azure Firewall Subnet"
