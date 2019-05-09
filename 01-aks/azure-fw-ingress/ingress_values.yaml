@@ -1,0 +1,6 @@
+controller:
+  service:
+    annotations:
+      service.beta.kubernetes.io/azure-load-balancer-internal: "true"
+      controller.stats.enabled: "true" 
+      controller.metrics.enabled: "true"
