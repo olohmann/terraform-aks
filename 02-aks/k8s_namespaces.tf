@@ -1,5 +1,5 @@
 resource "kubernetes_namespace" "ops" {
-    depends_on = ["azurerm_kubernetes_cluster.aks"]
+  depends_on = ["azurerm_kubernetes_cluster.aks"]
   metadata {
     annotations {
       name = "ops-namespace"
@@ -14,7 +14,7 @@ resource "kubernetes_namespace" "ops" {
 }
 
 resource "kubernetes_namespace" "dev" {
-    depends_on = ["azurerm_kubernetes_cluster.aks"]
+  depends_on = ["azurerm_kubernetes_cluster.aks"]
   metadata {
     annotations {
       name = "dev-namespace"
@@ -29,7 +29,7 @@ resource "kubernetes_namespace" "dev" {
 }
 
 resource "kubernetes_namespace" "production" {
-    depends_on = ["azurerm_kubernetes_cluster.aks"]
+  depends_on = ["azurerm_kubernetes_cluster.aks"]
   metadata {
     annotations {
       name = "production-namespace"
