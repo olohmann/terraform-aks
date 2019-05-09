@@ -1,5 +1,6 @@
 resource "helm_release" "nginx_ingress_release" {
   name       = "nginx-ingress"
+  depends_on = ["azurerm_kubernetes_cluster.aks"]
   chart      = "stable/nginx-ingress"
   namespace  = "${var.ingress_namespace}" 
 
@@ -20,6 +21,7 @@ resource "helm_release" "nginx_ingress_release" {
 
 # TODO: Replace once the Terraform Firewall Resource for DNAT is available.
 resource "null_resource" "azure_firewall_ingress_dnat_http" {
+    depends_on = ["azurerm_kubernetes_cluster.aks"]
   provisioner "local-exec" {
     when    = "destroy"
     command = "$(pwd)/az-firewall-delete-dnat-rule.sh"
@@ -53,6 +55,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
 }
 
 resource "null_resource" "azure_firewall_ingress_dnat_https" {
+  depends_on = ["azurerm_kubernetes_cluster.aks"]
   provisioner "local-exec" {
     when    = "destroy"
     command = "$(pwd)/az-firewall-delete-dnat-rule.sh"

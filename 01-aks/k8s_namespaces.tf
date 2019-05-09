@@ -21,7 +21,7 @@ resource "kubernetes_namespace" "dev" {
     }
 
     labels {
-      purpose = "operations"
+      purpose = "dev"
     }
 
     name = "dev"

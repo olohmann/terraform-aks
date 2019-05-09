@@ -1,47 +1,86 @@
 # # Locals block for hardcoded names. 
 locals {
-    backend_address_pool_name      = "${azurerm_virtual_network.test.name}-beap"
-    frontend_port_name             = "${azurerm_virtual_network.test.name}-feport"
-    frontend_ip_configuration_name = "${azurerm_virtual_network.test.name}-feip"
-    http_setting_name              = "${azurerm_virtual_network.test.name}-be-htst"
-    listener_name                  = "${azurerm_virtual_network.test.name}-httplstn"
-    request_routing_rule_name      = "${azurerm_virtual_network.test.name}-rqrt"
+    backend_address_pool_name      = "${var.prefix_snake}-beap"
+    frontend_port_name             = "${var.prefix_snake}-feport"
+    frontend_ip_configuration_name = "${var.prefix_snake}-feip"
+    http_setting_name              = "${var.prefix_snake}-be-htst"
+    listener_name                  = "${var.prefix_snake}-httplstn"
+    request_routing_rule_name      = "${var.prefix_snake}-rqrt"
+    redirect_configuration_name    = "${var.prefix_snake}-rdrcfg"
     app_gateway_subnet_name = "appgwsubnet"
 }
 
- resource "azurerm_virtual_network" "test" {
-   name                = "${var.virtual_network_name}"
-   location            = "${data.azurerm_resource_group.rg.location}"
-   resource_group_name = "${data.azurerm_resource_group.rg.name}"
-   address_space       = ["${var.virtual_network_address_prefix}"]
+ resource "azurerm_public_ip" "appgw_pip" {
+  name                = "${var.prefix_snake}-appgw-pip"
+  location            = "${var.resource_group_location}"
+  resource_group_name = "${var.resource_group}"
+  allocation_method   = "Static"
+  sku                 = "Standard"
+  domain_name_label   = "${var.prefix_snake}-${var.workspace_random_id}" 
+}
 
-   subnet {
-     name           = "${var.aks_subnet_name}"
-     address_prefix = "${var.aks_subnet_address_prefix}" 
-   }
+# Subnet Calc: 10.0.10.0/24 -> IP Range: 10.0.10.1 - 10.0.10.254
+resource "azurerm_subnet" "appgw_subnet" {
+  name                 = "${var.prefix_snake}-appgw-subnet"
+  resource_group_name  = "${var.resource_group}"
+  address_prefix       = "${var.appgw_subnet_cidr}"
+  virtual_network_name = "${var.vnet_name}"
 
-   subnet {
-     name           = "appgwsubnet"
-     address_prefix = "${var.app_gateway_subnet_address_prefix}"
-   }
-
-   tags = "${var.tags}"
- }
+}
 
 
- data "azurerm_subnet" "appgwsubnet" {
-   name                 = "appgwsubnet"
-   virtual_network_name = "${azurerm_virtual_network.test.name}"
-   resource_group_name  = "${data.azurerm_resource_group.rg.name}"
- }
 
- # Public Ip 
- resource "azurerm_public_ip" "test" {
-   name                         = "publicIp1"
-   location                     = "${data.azurerm_resource_group.rg.location}"
-   resource_group_name          = "${data.azurerm_resource_group.rg.name}"
-   public_ip_address_allocation = "static"
-   sku                          = "Standard"
+resource "azurerm_application_gateway" "network" {
+  name                = "example-appgateway"
+  resource_group_name = "${azurerm_resource_group.test.name}"
+  location            = "${azurerm_resource_group.test.location}"
 
-   tags = "${var.tags}"
- }
+  sku {
+    name     = "Standard_Small"
+    tier     = "Standard"
+    capacity = 2
+  }
+
+  gateway_ip_configuration {
+    name      = "my-gateway-ip-configuration"
+    subnet_id = "${azurerm_subnet.frontend.id}"
+  }
+
+  frontend_port {
+    name = "${local.frontend_port_name}"
+    port = 80
+  }
+
+  frontend_ip_configuration {
+    name                 = "${local.frontend_ip_configuration_name}"
+    public_ip_address_id = "${azurerm_public_ip.test.id}"
+  }
+
+  backend_address_pool {
+    name = "${local.backend_address_pool_name}"
+  }
+
+  backend_http_settings {
+    name                  = "${local.http_setting_name}"
+    cookie_based_affinity = "Disabled"
+    path         = "/path1/"
+    port                  = 80
+    protocol              = "Http"
+    request_timeout       = 1
+  }
+
+  http_listener {
+    name                           = "${local.listener_name}"
+    frontend_ip_configuration_name = "${local.frontend_ip_configuration_name}"
+    frontend_port_name             = "${local.frontend_port_name}"
+    protocol                       = "Http"
+  }
+
+  request_routing_rule {
+    name                        = "${local.request_routing_rule_name}"
+    rule_type                   = "Basic"
+    http_listener_name          = "${local.listener_name}"
+    backend_address_pool_name   = "${local.backend_address_pool_name}"
+    backend_http_settings_name  = "${local.http_setting_name}"
+  }
+}
