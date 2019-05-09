@@ -4,7 +4,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix          = "${local.prefix_snake}"
   resource_group_name = "${azurerm_resource_group.rg.name}"
   kubernetes_version  = "${var.aks_kubernetes_version}"
-
+  depends_on          = ["azuread_service_principal.aks_app_sp", "azuread_service_principal.aks_aad_server_sp"]
   linux_profile {
     admin_username = "azureuser"
 

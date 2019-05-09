@@ -34,6 +34,7 @@ resource "azurerm_firewall" "firewall" {
     subnet_id            = "${azurerm_subnet.firewall_subnet.id}"
     public_ip_address_id = "${var.external_pip_name == "" ? local.generated_pip_id : local.external_pip_id}"
   }
+  depends_on             = ["azurerm_public_ip.firewall_pip"]
 }
 
 resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
