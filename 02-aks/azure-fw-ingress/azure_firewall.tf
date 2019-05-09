@@ -11,7 +11,7 @@ resource "azurerm_public_ip" "firewall_pip" {
   resource_group_name = "${var.resource_group}"
   allocation_method   = "Static"
   sku                 = "Standard"
-  domain_name_label   = "${var.prefix_snake}-${var.workspace_random_id}"
+  domain_name_label   = "${var.prefix_snake}-${var.workspace_random_id}" 
 }
 
 # Subnet Calc: 10.0.10.0/24 -> IP Range: 10.0.10.1 - 10.0.10.254
@@ -53,8 +53,8 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
       "*.cdn.mscr.io",
       "*.${var.resource_group_location}.azmk8s.io",
       "*.hcp.${var.resource_group_location}.azmk8s.io",
-      "${var.la_monitor_containers_workspace_id}.ods.opinsights.azure.com",
-      "${var.la_monitor_containers_workspace_id}.oms.opinsights.azure.com",
+      "${var.prefix_snake}-${var.workspace_random_id}.ods.opinsights.azure.com",
+      "${var.prefix_snake}-${var.workspace_random_id}.oms.opinsights.azure.com",
       "api.snapcraft.io",
       "auth.docker.io",
       "azure.archive.ubuntu.com",
