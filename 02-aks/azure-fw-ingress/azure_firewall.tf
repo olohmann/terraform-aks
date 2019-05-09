@@ -1,11 +1,5 @@
 data "azurerm_subscription" "current" {}
 
-locals {
-  external_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.external_pip_resource_group}/providers/Microsoft.Network/publicIPAddresses/${var.external_pip_name}"
-  generated_pip_id = "${data.azurerm_subscription.current.id}/resourceGroups/${var.resource_group}/providers/Microsoft.Network/publicIPAddresses/${terraform.workspace}-${var.prefix}-firewall-pip"
-}
-
-
 resource "azurerm_public_ip" "firewall_pip" {
   count               = "${var.external_pip_name == "" ? 1 : 0}"
   name                = "${var.prefix_snake}-firewall-pip"
@@ -160,7 +154,7 @@ azure_firewall_resource_group_name = "${var.resource_group}"
 azure_firewall_pip = "${data.azurerm_public_ip.firewall_data_pip.ip_address}"
 EOF
 
-  filename = "${path.module}/../04-aks-post-deploy-ingress/${terraform.workspace}_firewall_config.generated.tfvars"
+  filename = "./az-fw-rules/${terraform.workspace}_firewall_config.generated.tfvars"
 }
 
 # Route Table: AKS Subnet -> Azure Firewall
