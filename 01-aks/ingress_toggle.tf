@@ -18,7 +18,7 @@ module "azure-fw-ingress" {
   source = "./azure-fw-ingress"
   
   depends_on = [
-        "${azurerm_kubernetes_cluster.aks}"
+        "${azurerm_kubernetes_cluster.aks.fqdn}"
     ]
 
   ingress_namespace = "default"
