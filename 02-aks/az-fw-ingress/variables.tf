@@ -7,10 +7,9 @@ variable "azure_firewall_name" {
   type = "string" 
   description = "Name of the Azure Firewall. Required to configure the DNat settings for the ingress controller."
 }
-
-variable "azure_firewall_resource_group_name" {
-  type = "string" 
-  description = "Name of the Azure Firewall Resource Group. Required to configure the DNat settings for the ingress controller."
+variable "resource_group" {
+  type = "string"
+  description = "Resource Group of the AKS Cluster"  
 }
 
 variable "azure_firewall_pip" {

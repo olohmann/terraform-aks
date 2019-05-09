@@ -26,7 +26,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
 
     environment {
       __VERBOSE             ="6"
-      RESOURCE_GROUP_NAME   ="${var.azure_firewall_resource_group_name}"
+      RESOURCE_GROUP_NAME   ="${var.resource_group}"
       FIREWALL_NAME         ="${var.azure_firewall_name}"
       COLLECTION_NAME       ="Ingress_HTTP"
     }
@@ -37,7 +37,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
 
     environment {
       __VERBOSE                 ="6"
-      RESOURCE_GROUP_NAME       ="${var.azure_firewall_resource_group_name}"
+      RESOURCE_GROUP_NAME       ="${var.resource_group}"
       FIREWALL_NAME             ="${var.azure_firewall_name}"
       COLLECTION_NAME           ="Ingress_HTTP"
       PRIORITY                  ="200"
@@ -59,7 +59,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_https" {
 
     environment {
       __VERBOSE             ="6"
-      RESOURCE_GROUP_NAME   ="${var.azure_firewall_resource_group_name}"
+      RESOURCE_GROUP_NAME   ="${var.resource_group}"
       FIREWALL_NAME         ="${var.azure_firewall_name}"
       COLLECTION_NAME       ="Ingress_HTTPS"
     }
@@ -70,7 +70,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_https" {
 
     environment {
       __VERBOSE                 ="6"
-      RESOURCE_GROUP_NAME       ="${var.azure_firewall_resource_group_name}"
+      RESOURCE_GROUP_NAME       ="${var.resource_group}"
       FIREWALL_NAME             ="${var.azure_firewall_name}"
       COLLECTION_NAME           ="Ingress_HTTPS"
       PRIORITY                  ="210"
