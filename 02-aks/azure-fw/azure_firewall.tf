@@ -161,7 +161,7 @@ azure_firewall_resource_group_name = "${var.resource_group}"
 azure_firewall_pip = "${data.azurerm_public_ip.firewall_data_pip.ip_address}"
 EOF
 
-  filename = "${path.module}/az-fw-rules/${terraform.workspace}_firewall_config.generated.tfvars"
+  filename = "${path.module}/../az-fw-ingress/${terraform.workspace}_firewall_config.generated.tfvars"
 }
 
 # Route Table: AKS Subnet -> Azure Firewall

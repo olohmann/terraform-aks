@@ -4,7 +4,7 @@ resource "helm_release" "nginx_ingress_release" {
   namespace  = "${var.ingress_namespace}" 
 
   values = [
-    "${file("ingress_values.yaml")}"
+    "${file("${path.module}/ingress_values.yaml")}"
   ]
 
   set {
