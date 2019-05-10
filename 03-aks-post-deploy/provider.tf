@@ -1,14 +1,27 @@
+locals {
+  prefix_snake                 = "${lower("${terraform.workspace}-${var.prefix}")}"
+}
+
 provider "azurerm" {
     version = "~>1.27.0"
 }
 
-locals {
-  prefix_snake = "${terraform.workspace}-${var.prefix}"
+provider "local" {
+  version = "~>1.1.0"
 }
 
 data "azurerm_kubernetes_cluster" "aks" {
   name                = "${local.prefix_snake}-aks"
   resource_group_name = "${local.prefix_snake}-aks-rg"
+}
+
+
+data "external" "helm_init_client_only" {
+  program = ["bash", "${path.root}/helm-init.sh"]
+
+  query {
+    env = "${terraform.workspace}"
+  }
 }
 
 provider "kubernetes" {
@@ -20,14 +33,6 @@ provider "kubernetes" {
   cluster_ca_certificate = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.cluster_ca_certificate)}"
 }
 
-data "external" "helm_init_client_only" {
-  program = ["bash", "${path.root}/helm-init.sh"]
-
-  query {
-    env = "${terraform.workspace}"
-  }
-}
-
 provider "helm" {
   version         = "~>0.8.0"
   namespace       = "kube-system"
@@ -36,4 +41,18 @@ provider "helm" {
   home            = "${data.external.helm_init_client_only.result.helm_home}"
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v${var.tiller_version}"
 
+  kubernetes {
+    host                   = "${data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.host}"
+    client_certificate     = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_certificate)}"
+    client_key             = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_key)}"
+    cluster_ca_certificate = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.cluster_ca_certificate)}"
+  }
+}
+
+provider "null" {
+  version = "~>2.1.0"
+}
+
+provider "external" {
+  version = "~>1.1.0"
 }
