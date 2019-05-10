@@ -31,16 +31,6 @@ data "external" "helm_init_client_only" {
   }
 }
 
-provider "helm" {
-  version         = "~>0.8.0"
-  namespace       = "kube-system"
-  service_account = "tiller-sa"
-  install_tiller  = "true"
-  home            = "${data.external.helm_init_client_only.result.helm_home}"
-  tiller_image    = "gcr.io/kubernetes-helm/tiller:v${var.tiller_version}"
-
-}
-
 
 provider "kubernetes" {
   version                = "~>1.5.1"
@@ -51,6 +41,21 @@ provider "kubernetes" {
   cluster_ca_certificate = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.cluster_ca_certificate)}"
 }
 
+provider "helm" {
+  version         = "~>0.8.0"
+  namespace       = "kube-system"
+  service_account = "tiller-sa"
+  install_tiller  = "true"
+  home            = "${data.external.helm_init_client_only.result.helm_home}"
+  tiller_image    = "gcr.io/kubernetes-helm/tiller:v${var.tiller_version}"
+
+  kubernetes {
+    host                   = "${data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.host}"
+    client_certificate     = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_certificate)}"
+    client_key             = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_key)}"
+    cluster_ca_certificate = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.cluster_ca_certificate)}"
+  }
+}
 
 provider "null" {
   version = "~>2.1.0"

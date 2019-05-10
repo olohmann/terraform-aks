@@ -36,7 +36,6 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
     }
   }
 
-  depends_on = ["helm_release.nginx_ingress_release"]
 }
 
 resource "null_resource" "azure_firewall_ingress_dnat_https" {
@@ -69,5 +68,4 @@ resource "null_resource" "azure_firewall_ingress_dnat_https" {
     }
   }
 
-  depends_on = ["helm_release.nginx_ingress_release", "null_resource.azure_firewall_ingress_dnat_http"]
 }
