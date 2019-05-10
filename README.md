@@ -49,10 +49,6 @@ az storage container create --name tf-state
 see: https://docs.microsoft.com/en-us/azure/storage/blobs/storage-quickstart-blobs-cli
 
 
-When all preconditions are met, you need to gather the required input variables in a file, e.g. `context.tfvars`. The following variables are **mandatory** to provide:
-1. Create a client and server application registration in Azure Active Directory to support Kubernetes OIDC integration. In short, this allows you to use Azure AD as your identity provider to manage cluster access. Follow [these steps](https://docs.microsoft.com/en-us/azure/aks/aad-integration) and retrieve the required setting information. Hint: You do not need to create multiple of these registration in your environment, but you should hand out individual secrets.
-1. Enable the AKS Audit Log **feature flag** in your subscription as described in the *Note* field in the [official documentation](https://docs.microsoft.com/en-us/azure/aks/view-master-logs). **Only register the flag, all actual diagnostic configuration is fully automated during the deployment.**
-
 When all preconditions are met, you need to gather the required input variables in a file, e.g. `secrets.dev.tfvars`. The following variables are **mandatory** to provide:
 
 ```hcl
@@ -68,7 +64,6 @@ storage_account_primary_access_key      = "<TODO>"
 
 aks_cluster_admins = ["john@contoso.com", "jane@contoso.com"]
 ```
-
 Finally you can execute the complete deployment process. `-e` denotes an environment like DEV, QA or PROD. `-p` denotes a prefix like your project name. `-v` points to the `context.tfvars` file discussed earlier:
 
 ```sh
@@ -85,14 +80,9 @@ The deployment structure is basically divided into two parts. The first part tak
 
    Configures the terraform azure backend state provider. It generates a local set of tfvars files `{envName}_backend.tfvars` that defines the Azure Storage account backend location for the terraform state.
 
-- `01-env` (optional)
-
-    An optional preparation step that creates the required service principals for the deployment. It creates a local secret tfvars file in `02-aks`. The secret file is git-ignored and can be used to as a parameter input file for the actual AKS deployment in `02-aks`.
-
     > Required rights for execution: Allowance to create Azure Service Principals in your Azure AD tenant, see [Azure Docs](https://docs.microsoft.com/en-us/azure/active-directory/develop/howto-create-service-principal-portal#required-permissions).
 
-- `02-aks`
-
+- `01-aks`
     The actual deployment of an AKS cluster, an Azure Firewall, and the baseline network infrastructure.
 
     > Required Azure RBAC: Subscription *Owner*.
