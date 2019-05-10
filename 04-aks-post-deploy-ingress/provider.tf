@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "~>1.24.0"
+  version = "~>1.27.0"
 }
 
 provider "local" {
@@ -31,15 +31,6 @@ data "external" "helm_init_client_only" {
   }
 }
 
-provider "kubernetes" {
-  version                = "~>1.5.1"
-  load_config_file       = false
-  host                   = "${data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.host}"
-  client_certificate     = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_certificate)}"
-  client_key             = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_key)}"
-  cluster_ca_certificate = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.cluster_ca_certificate)}"
-}
-
 provider "helm" {
   version         = "~>0.8.0"
   namespace       = "kube-system"
@@ -49,6 +40,17 @@ provider "helm" {
   tiller_image    = "gcr.io/kubernetes-helm/tiller:v${var.tiller_version}"
 
 }
+
+
+provider "kubernetes" {
+  version                = "~>1.5.1"
+  load_config_file       = false
+  host                   = "${data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.host}"
+  client_certificate     = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_certificate)}"
+  client_key             = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_key)}"
+  cluster_ca_certificate = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.cluster_ca_certificate)}"
+}
+
 
 provider "null" {
   version = "~>2.1.0"
