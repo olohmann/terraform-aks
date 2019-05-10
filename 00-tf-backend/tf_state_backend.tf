@@ -1,12 +1,9 @@
-locals {
-  prefix_snake = "${var.prefix}"
-}
 resource "local_file" "backend_config_aks" {
   content = <<EOF
-resource_group_name  = "${azurerm_resource_group.rg.name}"
-storage_account_name = "${azurerm_storage_account.sa.name}"
-container_name       = "${azurerm_storage_container.sc.name}"
-access_key           = "${azurerm_storage_account.sa.primary_access_key}"
+resource_group_name  = "${var.resource_group_name}"
+storage_account_name = "${var.storage_account_name}"
+container_name       = "${var.storage_container_name}"
+access_key           = "${var.storage_account_primary_access_key}"
 key                  = "aks.tfstate"
 EOF
 
@@ -15,10 +12,10 @@ EOF
 
 resource "local_file" "backend_config_aks_post_deploy" {
   content = <<EOF
-resource_group_name  = "${azurerm_resource_group.rg.name}"
-storage_account_name = "${azurerm_storage_account.sa.name}"
-container_name       = "${azurerm_storage_container.sc.name}"
-access_key           = "${azurerm_storage_account.sa.primary_access_key}"
+resource_group_name  = "${var.resource_group_name}"
+storage_account_name = "${var.storage_account_name}"
+container_name       = "${var.storage_container_name}"
+access_key           = "${var.storage_account_primary_access_key}"
 key                  = "aks_post_deploy.tfstate"
 EOF
 
@@ -27,10 +24,10 @@ EOF
 
 resource "local_file" "backend_config_aks_post_deploy_ingress" {
   content = <<EOF
-resource_group_name  = "${azurerm_resource_group.rg.name}"
-storage_account_name = "${azurerm_storage_account.sa.name}"
-container_name       = "${azurerm_storage_container.sc.name}"
-access_key           = "${azurerm_storage_account.sa.primary_access_key}"
+resource_group_name  = "${var.resource_group_name}"
+storage_account_name = "${var.storage_account_name}"
+container_name       = "${var.storage_container_name}"
+access_key           = "${var.storage_account_primary_access_key}"
 key                  = "aks_post_deploy_ingress.tfstate"
 EOF
 
