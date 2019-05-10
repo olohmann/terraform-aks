@@ -166,19 +166,15 @@ data "azurerm_public_ip" "firewall_data_pip" {
 
 # Route Table: AKS Subnet -> Azure Firewall
 
-resource "azurerm_route_table" "aks_subnet_rt" {
+resource "azurerm_route" "aks_next_hop_fw" {
   name                = "${var.prefix_snake}-default-route"
-  location            = "${var.resource_group_location}"
   resource_group_name = "${var.resource_group}"
-
-   route {
-    name                   = "default"
-    address_prefix         = "0.0.0.0/0"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "${azurerm_firewall.firewall.ip_configuration.0.private_ip_address}"
-  }
-
+  route_table_name    = "${var.prefix_snake}-aks-rt"
+  address_prefix      = "0.0.0.0/0"
+  next_hop_type       = "VirtualAppliance"
+  next_hop_in_ip_address = "${azurerm_firewall.firewall.ip_configuration.0.private_ip_address}"
 }
+
 
 resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
   name               = "firewall_diagnostics"

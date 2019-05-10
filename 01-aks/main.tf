@@ -46,8 +46,8 @@ resource "azurerm_subnet" "aks_subnet" {
   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
 }
 
-resource "azurerm_subnet_route_table_association" "rt_association" {
-  subnet_id      = "${azurerm_subnet.aks_subnet.id}"
-  route_table_id = "${module.azure-fw.aks-subnet-rt-id}"
-  depends_on = ["azurerm_subnet.aks_subnet"]
+resource "azurerm_route_table" "aks_subnet_rt" {
+  name                = "${var.prefix_snake}-aks-rt"
+  location            = "${var.resource_group_location}"
+  resource_group_name = "${var.resource_group}"
 }
