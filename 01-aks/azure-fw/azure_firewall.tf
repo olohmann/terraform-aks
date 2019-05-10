@@ -154,16 +154,6 @@ data "azurerm_public_ip" "firewall_data_pip" {
   resource_group_name = "${var.external_pip_resource_group == "" ? "${var.resource_group}" : "${var.external_pip_resource_group}"}"
 }
 
-#resource "local_file" "firewall_config" {
-#  content = <<EOF
-#azure_firewall_name = "${azurerm_firewall.firewall.name}"
-#azure_firewall_resource_group_name = "${var.resource_group}"
-# azure_firewall_pip = "${data.azurerm_public_ip.firewall_data_pip.ip_address}"
-#EOF
-
-#  filename = "${path.module}/../az-fw-ingress/${terraform.workspace}_firewall_config.generated.tfvars"
-#}
-
 # Route Table: AKS Subnet -> Azure Firewall
 
 resource "azurerm_route" "aks_next_hop_fw" {

@@ -20,30 +20,28 @@ locals {
 }
 
 # Subnet Calc: 10.0.10.0/24 -> IP Range: 10.0.10.1 - 10.0.10.254
-resource "azurerm_subnet" "appgw_subnet" {
-  name                 = "${var.prefix_snake}-appgw-subnet"
+resource "azurerm_subnet" "appgw_subnet_fe" {
+  name                 = "${var.prefix_snake}-appgw-fe"
   resource_group_name  = "${var.resource_group}"
   address_prefix       = "${var.appgw_subnet_cidr}"
   virtual_network_name = "${var.vnet_name}"
 
 }
 
-
-
-resource "azurerm_application_gateway" "network" {
-  name                = "example-appgateway"
-  resource_group_name = "${azurerm_resource_group.test.name}"
-  location            = "${azurerm_resource_group.test.location}"
+resource "azurerm_application_gateway" "appgw" {
+  name                = "${var.prefix_snake}-appgateway"
+  resource_group_name = "${var.resource_group}"
+  location            = "${var.resource_group_location}"
 
   sku {
-    name     = "Standard_Small"
-    tier     = "Standard"
-    capacity = 2
+    name     = "WAF_v2"
+    tier     = "WAF_v2"
+    capacity = 1
   }
 
   gateway_ip_configuration {
-    name      = "my-gateway-ip-configuration"
-    subnet_id = "${azurerm_subnet.frontend.id}"
+    name      = "${var.prefix_snake}-ip-config"
+    subnet_id = "${azurerm_subnet.appgw_subnet_fe.id}"
   }
 
   frontend_port {
@@ -53,7 +51,7 @@ resource "azurerm_application_gateway" "network" {
 
   frontend_ip_configuration {
     name                 = "${local.frontend_ip_configuration_name}"
-    public_ip_address_id = "${azurerm_public_ip.test.id}"
+    public_ip_address_id = "${azurerm_public_ip.appgw_pip.id}"
   }
 
   backend_address_pool {
@@ -63,7 +61,7 @@ resource "azurerm_application_gateway" "network" {
   backend_http_settings {
     name                  = "${local.http_setting_name}"
     cookie_based_affinity = "Disabled"
-    path         = "/path1/"
+    path         = "/"
     port                  = 80
     protocol              = "Http"
     request_timeout       = 1
