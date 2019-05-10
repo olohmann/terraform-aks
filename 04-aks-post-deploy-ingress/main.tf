@@ -1,5 +1,5 @@
 resource "helm_release" "nginx_ingress_release" {
-  name      = "nginx-ingress"
+  name      = "nginx-ingress.controller"
   chart     = "stable/nginx-ingress"
   namespace = "${var.ingress_namespace}"
 
@@ -15,6 +15,11 @@ resource "helm_release" "nginx_ingress_release" {
   set {
     name  = "rbac.create"
     value = "true"
+  }
+  
+  set {
+    name  = "name"
+    value = "nginx-ingress-controller"
   }
 }
 

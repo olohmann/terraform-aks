@@ -147,4 +147,10 @@ run_terraform true ${e} ${p} "00-tf-backend" ${VAR_FILE_PATH} ""
 .log 6 "[==== 01 AKS Resources ====]"
 run_terraform false ${e} ${p} "01-aks" ${VAR_FILE_PATH} ""
 
+.log 6 "[==== 03 AKS Cluster: RBAC ====]"
+run_terraform false ${e} ${p} "03-aks-post-deploy" ${VAR_FILE_PATH} ""
+
+.log 6 "[==== 04 AKS Cluster: Ingress ====]"
+run_terraform false ${e} ${p} "04-aks-post-deploy-ingress" ${VAR_FILE_PATH} ""
+
 .log 6 "[==== Done. ====]"
