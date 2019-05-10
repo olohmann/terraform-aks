@@ -12,19 +12,19 @@ module "azure-fw" {
   workspace_random_id = "${random_id.workspace.hex}"
 }
 
-module "azure-fw-ingress" {
-  source = "./azure-fw-ingress"
-  
-  depends_on = [
-        "${azurerm_kubernetes_cluster.aks.id}"
-    ]
-
-  ingress_namespace = "default"
-  azure_firewall_name = "${local.prefix_snake}-firewall"
-  resource_group = "${azurerm_resource_group.rg.name}"
-  azure_firewall_pip = "${module.azure-fw.azure-firewall-pip}"
-  allowed_ingress_source_addresses = "*"
-}
+# module "azure-fw-ingress" {
+#   source = "./azure-fw-ingress"
+#   
+#   depends_on = [
+#         "${azurerm_kubernetes_cluster.aks.id}"
+#     ]
+# 
+#   ingress_namespace = "default"
+#   azure_firewall_name = "${local.prefix_snake}-firewall"
+#   resource_group = "${azurerm_resource_group.rg.name}"
+#   azure_firewall_pip = "${module.azure-fw.azure-firewall-pip}"
+#   allowed_ingress_source_addresses = "*"
+# }
 
 # OR
 # ToDo

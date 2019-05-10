@@ -4,7 +4,7 @@ resource "helm_release" "nginx_ingress_release" {
   namespace  = "${var.ingress_namespace}" 
 
   values = [
-    "${file("${path.module}/ingress_values.yaml")}"
+    "${file("ingress_values.yaml")}"
   ]
 
   set {
@@ -22,7 +22,7 @@ resource "helm_release" "nginx_ingress_release" {
 resource "null_resource" "azure_firewall_ingress_dnat_http" {
   provisioner "local-exec" {
     when    = "destroy"
-    command = "$(pwd)/az-firewall-delete-dnat-rule.sh"
+    command = "$(pwd)/az-fw-ingress-scripts/az-firewall-delete-dnat-rule.sh"
 
     environment {
       __VERBOSE             ="6"
@@ -33,7 +33,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
   }
 
   provisioner "local-exec" {
-    command = "export TRANSLATED_ADDRESS=$(kubectl get svc --selector app=nginx-ingress --selector component=controller -o=jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}') && $(pwd)/azure-fw-ingress/az-firewall-create-dnat-rule.sh"
+    command = "export TRANSLATED_ADDRESS=$(kubectl get svc --selector app=nginx-ingress --selector component=controller -o=jsonpath='{.items[0].status.loadBalancer.ingress[0].ip}') && $(pwd)/az-fw-ingress-scripts/az-firewall-create-dnat-rule.sh"
 
     environment {
       __VERBOSE                 ="6"
@@ -55,7 +55,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
 resource "null_resource" "azure_firewall_ingress_dnat_https" {
     provisioner "local-exec" {
     when    = "destroy"
-    command = "$(pwd)/azure-fw-ingress/az-firewall-delete-dnat-rule.sh"
+    command = "$(pwd)/az-fw-ingress-scripts/az-firewall-delete-dnat-rule.sh"
 
     environment {
       __VERBOSE             ="6"
