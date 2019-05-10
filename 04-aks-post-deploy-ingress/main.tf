@@ -68,4 +68,5 @@ resource "null_resource" "azure_firewall_ingress_dnat_https" {
     }
   }
 
+  depends_on = ["null_resource.azure_firewall_ingress_dnat_http"]
 }

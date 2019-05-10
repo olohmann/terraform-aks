@@ -1,3 +1,10 @@
+locals {
+  prefix_snake                 = "${lower("${terraform.workspace}-${var.prefix}")}"
+  firewall_resource_group_name = "${local.prefix_snake}-aks-rg"
+  firewall_name                = "${local.prefix_snake}-firewall"
+  firewall_pip                 = "${data.azurerm_public_ip.firewall_data_pip.ip_address}"
+}
+
 provider "azurerm" {
   version = "~>1.27.0"
 }
@@ -9,13 +16,6 @@ provider "local" {
 data "azurerm_public_ip" "firewall_data_pip" {
   name                = "${var.external_pip_name == "" ? "${local.prefix_snake}-firewall-pip" : "${var.external_pip_name}"}"
   resource_group_name = "${var.external_pip_resource_group == "" ? "${local.firewall_resource_group_name}" : "${var.external_pip_resource_group}"}"
-}
-
-locals {
-  prefix_snake                 = "${lower("${terraform.workspace}-${var.prefix}")}"
-  firewall_resource_group_name = "${local.prefix_snake}-aks-rg"
-  firewall_name                = "${local.prefix_snake}-firewall"
-  firewall_pip                 = "${data.azurerm_public_ip.firewall_data_pip.ip_address}"
 }
 
 data "azurerm_kubernetes_cluster" "aks" {
@@ -30,7 +30,6 @@ data "external" "helm_init_client_only" {
     env = "${terraform.workspace}"
   }
 }
-
 
 provider "kubernetes" {
   version                = "~>1.5.1"
