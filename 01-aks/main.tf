@@ -47,7 +47,7 @@ resource "azurerm_subnet" "aks_subnet" {
 }
 
 resource "azurerm_route_table" "aks_subnet_rt" {
-  name                = "${var.prefix_snake}-aks-rt"
-  location            = "${var.resource_group_location}"
-  resource_group_name = "${var.resource_group}"
+  name                = "${local.prefix_snake}-aks-rt"
+  location            = "${azurerm_resource_group.rg.location}"
+  resource_group_name = "${azurerm_resource_group.rg.name}"
 }
