@@ -1,3 +1,5 @@
 terraform {
-  backend "azurerm" {}
+  backend "azurerm" {
+    key = "env.tfstate"
+  }
 }

@@ -37,6 +37,16 @@ if ! [[ -x "$(command -v az)" ]]; then
   errors_count=$((errors_count + 1))
 fi
 
+if ! [[ -x "$(command -v terraform)" ]]; then
+  .log 3 "terraform is required and was not found in PATH."
+  errors_count=$((errors_count + 1))
+fi
+
+if ! [[ -x "$(command -v python)" ]]; then
+  .log 3 "python is required and was not found in PATH."
+  errors_count=$((errors_count + 1))
+fi
+
 if ! [[ -x "$(command -v helm)" ]]; then
   .log 3 "helm is required and was not found in PATH."
   errors_count=$((errors_count + 1))
@@ -44,11 +54,6 @@ fi
 
 if ! [[ -x "$(command -v kubectl)" ]]; then
   .log 3 "kubectl is required and was not found in PATH."
-  errors_count=$((errors_count + 1))
-fi
-
-if ! [[ -x "$(command -v terraform)" ]]; then
-  .log 3 "terraform is required and was not found in PATH."
   errors_count=$((errors_count + 1))
 fi
 

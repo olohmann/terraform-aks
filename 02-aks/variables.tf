@@ -68,7 +68,7 @@ variable "azure_container_registry_id" {
 variable "create_azure_container_registry" {
   type         = "string"
   description  = "Boolean flag, true: create new dedicated ACR, false: don't create dedicated ACR."
-  default      = "false"
+  default      = "true"
 }
 
 variable "external_pip_name" {

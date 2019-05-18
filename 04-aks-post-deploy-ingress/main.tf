@@ -22,6 +22,8 @@ data "kubernetes_service" "nginx_ingress_controller" {
   metadata {
     name = "nginx-ingress-controller"
   }
+
+  depends_on = ["helm_release.nginx_ingress_release"]
 }
 
 # TODO: Replace once the Terraform Firewall Resource for DNAT is available.
