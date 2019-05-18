@@ -42,6 +42,7 @@ get_tf_variables() {
 }
 
 set_tf_output() {
+    # Transform terraform outputs to environment vars with __TF_ prefix, that will be transferred to dependant sub-deployments.
     eval $(terraform output -json | python -c 'import sys, json; tf_output = json.load(sys.stdin); sys.stdout.write(";".join(map(lambda key: "export __TF_{key}=\"{value}\"".format(key=key, value=tf_output[key]["value"]), tf_output.keys())))')
 }
 
