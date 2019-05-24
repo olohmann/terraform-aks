@@ -1,3 +1,0 @@
-[submodule "99-externals/aad-pod-identity"]
-	path = 99-externals/aad-pod-identity
-	url = git@github.com:Azure/aad-pod-identity.git
