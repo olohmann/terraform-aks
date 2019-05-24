@@ -62,7 +62,7 @@ fi
 az_firewall_test="$(az extension list | jq 'map(.name) | index("azure-firewall")' | tr -d '\n')"
 if ! [[ $az_firewall_test =~ ^[0-9]+ ]]; then
   if [ -z "${servicePrincipalId}" ]; then
-    .log 3 "az CLI firewall extension is not installed. install via 'az extension add -n azure-firewall'."
+    .log 4 "az CLI firewall extension is not installed. install via 'az extension add -n azure-firewall'."
     errors_count=$((errors_count + 1))
   else
     .log 3 "Installing missing az extension 'azure-firewall'"
