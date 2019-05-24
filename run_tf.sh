@@ -253,8 +253,8 @@ ensure_subription_context
 ensure_terraform_backend "00-tf-backend" "${VAR_FILE_PATH}"
 
 .log 6 "[==== 01 Environment ====]"
-__TF_aks_cluster_sp_app_id=${__TF_aks_cluster_sp_app_id:=""}
-if [ -z "${__TF_aks_cluster_sp_app_id}" ]; then
+__TF_AKS_CLUSTER_SP_APP_ID=${__TF_AKS_CLUSTER_SP_APP_ID:=""}
+if [ -z "${__TF_AKS_CLUSTER_SP_APP_ID}" ]; then
     .log 6 "Detected no AKS Cluster SP Config. Creating new SP..."
     run_terraform ${v} ${e} "01-env" "${VAR_FILE_PATH}"
 else
