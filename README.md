@@ -25,7 +25,7 @@ export __TF_aad_server_app_id="00000000-0000-0000-0000-000000000000"
 export __TF_aad_server_app_secret="PatVMovW........WXJyV5fw="
 export __TF_aad_client_app_id="00000000-0000-0000-0000-000000000000"
 export __TF_aad_tenant_id="00000000-0000-0000-0000-000000000000"
-export __TF_aks_cluster_admins = [\\\"john@contoso.com\\\", \\\"jane@contoso.com\\\"]
+export __TF_aks_cluster_admins="[\\\"john@contoso.com\\\", \\\"jane@contoso.com\\\"]"
 ```
 
 Source the `env.dev.sh` file via `source env.dev.sh` in your current session.
