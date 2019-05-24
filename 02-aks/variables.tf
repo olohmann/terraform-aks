@@ -82,3 +82,9 @@ variable "external_pip_resource_group" {
   description = "If configured, the Azure Firewall resource will reference the externally create Puplic IP instead of creating a new one."
   default = ""
 }
+
+variable "assign_roles" {
+  type = "string"
+  description = "If 'true' assigns roles, if 'false' skips the role assignments for the Cluster SP (e.g. Network Contributor Access)."
+  default = "true"
+}
