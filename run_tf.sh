@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+TF_SCRIPT_VERSION=0.4.0
 
 set -o errexit
 set -o nounset
@@ -48,6 +49,7 @@ set_tf_output() {
 
 usage() {
     echo "Usage: $0 [-e <environment_name>] [-i <tf_var_file>] [-v] [-f] [-p] [-h]" 1>&2
+    echo "Version: ${RUN_TF_VERSION}"
     echo ""
     echo "Options"
     echo "-e <environment_name>    Defines an environment name that will be activated"
@@ -101,15 +103,15 @@ ensure_terraform_backend() {
 
     if [ "${f}" = true ]; then
         if [ -z "${RT_VAR_FILE_PATH}" ]; then
-            eval $(printf "terraform plan -out=terraform.tfplan %s" "${RT_VARS}") && terraform apply terraform.tfplan
+            eval $(printf "terraform plan -input=false -out=terraform.tfplan %s" "${RT_VARS}") && terraform apply terraform.tfplan
         else
-            eval $(printf "terraform plan -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}") && terraform apply terraform.tfplan
+            eval $(printf "terraform plan -input=false -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}") && terraform apply terraform.tfplan
         fi
     else
         if [ -z "${RT_VAR_FILE_PATH}" ]; then
-            eval $(printf "terraform plan -out=terraform.tfplan %s" "${RT_VARS}")
+            eval $(printf "terraform plan -input=false -out=terraform.tfplan %s" "${RT_VARS}")
         else
-            eval $(printf "terraform plan -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
+            eval $(printf "terraform plan -input=false -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
         fi
 
         read -p "Continue with terraform apply (y/n)? " CONT
@@ -162,21 +164,15 @@ run_terraform() {
     fi
 
     if [ ${RT_VALIDATE_ONLY} = false ]; then
-        if [ "${f}" = true ]; then
-            if [ -z "${RT_VAR_FILE_PATH}" ]; then
-                eval $(printf "terraform plan -out=terraform.tfplan %s" "${RT_VARS}") \
-                    && terraform apply terraform.tfplan
-            else
-                eval $(printf "terraform plan -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}") \
-                    && terraform apply terraform.tfplan
-            fi
+        if [ -z "${RT_VAR_FILE_PATH}" ]; then
+            eval $(printf "terraform plan -input=false -out=terraform.tfplan %s" "${RT_VARS}")
         else
-            if [ -z "${RT_VAR_FILE_PATH}" ]; then
-                eval $(printf "terraform plan -out=terraform.tfplan %s" "${RT_VARS}")
-            else
-                eval $(printf "terraform plan -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
-            fi
+            eval $(printf "terraform plan -input=false -out=terraform.tfplan -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
+        fi
 
+        if [ "${f}" = true ]; then
+            terraform apply terraform.tfplan
+        else
             read -p "Continue with terraform apply (y/n)? " CONT
             if [ "$CONT" = "y" ]; then
                 terraform apply terraform.tfplan
@@ -191,7 +187,6 @@ run_terraform() {
             eval $(printf "terraform validate -var-file %s %s" "${RT_VAR_FILE_PATH}" "${RT_VARS}")
         fi
     fi
-
     set_tf_output
     popd
 }
@@ -234,7 +229,7 @@ if [ -z "${e}" ]; then
 fi
 
 .log 6 "[==== Check Required Tools ====]"
-bash $DIR/check_tools.sh
+/usr/bin/env bash $DIR/check_tools.sh
 
 servicePrincipalId=${servicePrincipalId:=""}
 if [ -z "${servicePrincipalId}" ]; then
