@@ -51,7 +51,6 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
       PRIORITY              = "200"
       RULE_NAME             = "Ingress_HTTP"
       DESTINATION_ADDRESSES = "${local.firewall_pip}"
-      DESTINATION_PORT      = "443"
       DESTINATION_PORT      = "80"
       SOURCE_ADDRESSES      = "${var.allowed_ingress_source_addresses}"
       TRANSLATED_PORT       = "80"

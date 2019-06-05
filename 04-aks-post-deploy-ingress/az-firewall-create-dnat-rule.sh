@@ -95,6 +95,6 @@ else
     --translated-address "$TRANSLATED_ADDRESS" \
     --translated-port "$TRANSLATED_PORT" \
     --protocols "TCP" \
-    --description "Ingress QKnows DNAT Configuration" 
+    --description "Ingress DNAT Configuration" 
 fi
 
