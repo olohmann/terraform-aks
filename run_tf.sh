@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-TF_SCRIPT_VERSION=0.4.0
+TF_SCRIPT_VERSION=0.4.1
 
 set -o errexit
 set -o nounset
