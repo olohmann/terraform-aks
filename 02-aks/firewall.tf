@@ -40,29 +40,32 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
     source_addresses = ["${azurerm_virtual_network.vnet.address_space.0}"]
 
     target_fqdns = [
-      "*.blob.core.windows.net",
-      "*.cdn.mscr.io",
-      "*.${local.location}.azmk8s.io",
       "*.hcp.${local.location}.azmk8s.io",
+      "*.tun.${local.location}.azmk8s.io",
+
+      "aksrepos.azurecr.io",
+      "*.blob.core.windows.net",
+      "mcr.microsoft.com",
+      "*.cdn.mscr.io",
+      "management.azure.com",
+      "login.microsoftonline.com",
+      "api.snapcraft.io",
+      "*.docker.io",
+
+      "*.ubuntu.com",
+      "packages.microsoft.com",
+      "dc.services.visualstudio.com",
       "${azurerm_log_analytics_workspace.la_monitor_containers.workspace_id}.ods.opinsights.azure.com",
       "${azurerm_log_analytics_workspace.la_monitor_containers.workspace_id}.oms.opinsights.azure.com",
-      "api.snapcraft.io",
-      "auth.docker.io",
-      "azure.archive.ubuntu.com",
-      "dc.services.visualstudio.com",
-      "download.opensuse.org",
-      "gcr.io",
-      "k8s.gcr.io",
-      "login.microsoftonline.com",
-      "management.azure.com",
-      "mcr.microsoft.com",
-      "packages.microsoft.com",
-      "production.cloudflare.docker.com",
-      "registry-1.docker.io",
-      "security.ubuntu.com",
-      "storage.googleapis.com",
-      "quay.io",
-      "d3uo42mtx6z2cr.cloudfront.net"
+      "*.monitoring.azure.com",
+
+      "gov-prod-policy-data.trafficmanager.net",
+
+      "apt.dockerproject.org",
+      "nvidia.github.io",
+
+      // Tiller, remove with 3.0 or re-host
+      "gcr.io"
     ]
 
     protocol {
@@ -77,9 +80,8 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
     source_addresses = ["${azurerm_virtual_network.vnet.address_space.0}"]
 
     target_fqdns = [
-      "azure.archive.ubuntu.com",
-      "download.opensuse.org",
-      "security.ubuntu.com"
+      "api.snapcraft.io",
+      "*.ubuntu.com"
     ]
 
     protocol {
@@ -118,14 +120,33 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
     ]
   }
 
-  # TODO: Minimize surface via Azure DC list. Will change with VNet Svc Endpoint Support.
+  # TODO: Minimize surface via Azure DC list. Will change with tag Support.
   rule {
-    name = "aks-rules-ssh"
+    name = "aks-rules-tunnel-front"
 
-    source_addresses = ["*"]
+    source_addresses = ["10.0.0.0/8"]
 
     destination_ports = [
       "22",
+      "9000"
+    ]
+
+    destination_addresses = [
+      "*"
+    ]
+
+    protocols = [
+      "TCP"
+    ]
+  }
+
+  # TODO: Minimize surface via Azure DC list. Will change with tag Support.
+  rule {
+    name = "aks-rules-internal-tls"
+
+    source_addresses = ["10.0.0.0/8"]
+
+    destination_ports = [
       "443"
     ]
 

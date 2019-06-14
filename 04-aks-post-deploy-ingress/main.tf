@@ -32,7 +32,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
     when    = "destroy"
     command = "$(pwd)/az-firewall-delete-dnat-rule.sh"
 
-    environment {
+    environment = {
       __VERBOSE           = "6"
       RESOURCE_GROUP_NAME = "${local.firewall_resource_group_name}"
       FIREWALL_NAME       = "${local.firewall_name}"
@@ -43,7 +43,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
   provisioner "local-exec" {
     command = "export TRANSLATED_ADDRESS=${data.kubernetes_service.nginx_ingress_controller.load_balancer_ingress.0.ip} && $(pwd)/az-firewall-create-dnat-rule.sh"
 
-    environment {
+    environment = {
       __VERBOSE             = "6"
       RESOURCE_GROUP_NAME   = "${local.firewall_resource_group_name}"
       FIREWALL_NAME         = "${local.firewall_name}"
@@ -65,7 +65,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_https" {
     when    = "destroy"
     command = "$(pwd)/az-firewall-delete-dnat-rule.sh"
 
-    environment {
+    environment = {
       __VERBOSE           = "6"
       RESOURCE_GROUP_NAME = "${local.firewall_resource_group_name}"
       FIREWALL_NAME       = "${local.firewall_name}"
@@ -76,7 +76,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_https" {
   provisioner "local-exec" {
     command = "export TRANSLATED_ADDRESS=${data.kubernetes_service.nginx_ingress_controller.load_balancer_ingress.0.ip} && $(pwd)/az-firewall-create-dnat-rule.sh"
 
-    environment {
+    environment = {
       __VERBOSE             = "6"
       RESOURCE_GROUP_NAME   = "${local.firewall_resource_group_name}"
       FIREWALL_NAME         = "${local.firewall_name}"

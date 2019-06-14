@@ -16,7 +16,7 @@ resource "azurerm_role_assignment" "acr_pull" {
 
 resource "azurerm_role_assignment" "acr_dedicated_pull" {
   count                = "${var.create_azure_container_registry == "true" ? (var.assign_roles == "true" ? 1 : 0) : 0}"
-  scope                = "${azurerm_container_registry.acr.id}"
+  scope                = "${azurerm_container_registry.acr.*.id[count.index]}"
   role_definition_name = "AcrPull"
   principal_id         = "${var.aks_cluster_sp_object_id}"
 }
