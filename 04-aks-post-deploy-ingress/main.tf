@@ -1,21 +1,19 @@
+data "template_file" "helm_values" {
+  template = "${file("${path.module}/ingress_values.template.yaml")}"
+  vars = {
+    replicaCount = "2"
+    hasInternalLoadBalancer = "${var.deploy_azure_firewall}"
+    loadBalancerIP = "${data.azurerm_public_ip.firewall_data_pip.ip_address}"
+    publicIpResourceGroupName = "${var.external_pip_resource_group != "" ? var.external_pip_resource_group : data.azurerm_public_ip.firewall_data_pip.resource_group_name}"
+  }
+}
+
 resource "helm_release" "nginx_ingress_release" {
   name      = "nginx-ingress"
   chart     = "stable/nginx-ingress"
   namespace = "${var.ingress_namespace}"
 
-  values = [
-    "${file("ingress_values.yaml")}",
-  ]
-
-  set {
-    name  = "controller.replicaCount"
-    value = "3"
-  }
-
-  set {
-    name  = "rbac.create"
-    value = "true"
-  }
+  values = ["${data.template_file.helm_values.rendered}"]
 }
 
 data "kubernetes_service" "nginx_ingress_controller" {
@@ -28,6 +26,7 @@ data "kubernetes_service" "nginx_ingress_controller" {
 
 # TODO: Replace once the Terraform Firewall Resource for DNAT is available.
 resource "null_resource" "azure_firewall_ingress_dnat_http" {
+  count = "${var.deploy_azure_firewall == "true" ? 1 : 0}"
   provisioner "local-exec" {
     when    = "destroy"
     command = "$(pwd)/az-firewall-delete-dnat-rule.sh"
@@ -61,6 +60,7 @@ resource "null_resource" "azure_firewall_ingress_dnat_http" {
 }
 
 resource "null_resource" "azure_firewall_ingress_dnat_https" {
+  count = "${var.deploy_azure_firewall == "true" ? 1 : 0}"
   provisioner "local-exec" {
     when    = "destroy"
     command = "$(pwd)/az-firewall-delete-dnat-rule.sh"

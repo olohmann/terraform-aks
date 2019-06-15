@@ -6,8 +6,18 @@ provider "local" {
   version = "~>1.2.2"
 }
 
+provider "template" {
+  version = "~>2.1.0"
+}
+
+
+locals {
+  pip_name = "${local.prefix_snake}-${var.deploy_azure_firewall == "true" ? "firewall" : "elb"}-pip"
+}
+
+
 data "azurerm_public_ip" "firewall_data_pip" {
-  name                = "${var.external_pip_name == "" ? "${local.prefix_snake}-firewall-pip" : "${var.external_pip_name}"}"
+  name                = "${var.external_pip_name == "" ? local.pip_name : "${var.external_pip_name}"}"
   resource_group_name = "${var.external_pip_resource_group == "" ? "${local.firewall_resource_group_name}" : "${var.external_pip_resource_group}"}"
 }
 

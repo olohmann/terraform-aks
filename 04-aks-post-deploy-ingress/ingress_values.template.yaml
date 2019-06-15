@@ -1,0 +1,7 @@
+controller:
+  replicaCount: ${replicaCount}
+  service:
+    annotations:
+      service.beta.kubernetes.io/azure-load-balancer-internal: "${hasInternalLoadBalancer}"
+      service.beta.kubernetes.io/azure-load-balancer-resource-group: "${publicIpResourceGroupName}"
+    loadBalancerIP: ${loadBalancerIP}

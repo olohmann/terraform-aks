@@ -320,6 +320,8 @@ function run_terraform() {
     # be re-created. This, however, avoids problems if you deployments from a single
     # source with different prefixes.
     rm -f .terraform/terraform.tfstate
+    rm -rf .terraform/terraform.tfstate.d/
+    rm -f .terraform/environment
 
     # Init with Backend config.
     eval $(printf "${TERRAFORM_PATH} init %s -no-color" "${BACKEND_CONFIG}")
@@ -463,7 +465,7 @@ fi
 declare -a deployments
 deployments=()
 deployments_temp_file=$(mktemp)
-find ${DIR} -type f -name '*.tf' | sed ${sed_flag} 's|/[^/]+$||' | sort | uniq > ${deployments_temp_file}
+find ${DIR} -maxdepth 2 -type f -name '*.tf' | sed ${sed_flag} 's|/[^/]+$||' | sort | uniq > ${deployments_temp_file}
 while read -r deployment; do
     deployments+=("${deployment}")
 done < ${deployments_temp_file}

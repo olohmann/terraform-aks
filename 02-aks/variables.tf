@@ -88,3 +88,9 @@ variable "assign_roles" {
   description = "If 'true' assigns roles, if 'false' skips the role assignments for the Cluster SP (e.g. Network Contributor Access)."
   default = "true"
 }
+
+variable "deploy_azure_firewall" {
+  type = "string"
+  description = "If 'true' (should be the case for QA & PROD deployments) an Azure Firewall is put in front of the cluster to monitor in- and egress traffic. If 'false', an Azure External LB will be deployed w/o any filtering what so ever."
+  default = "true"
+}
