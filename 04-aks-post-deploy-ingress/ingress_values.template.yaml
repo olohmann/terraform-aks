@@ -3,5 +3,7 @@ controller:
   service:
     annotations:
       service.beta.kubernetes.io/azure-load-balancer-internal: "${hasInternalLoadBalancer}"
+%{ if hasInternalLoadBalancer != "true" }
       service.beta.kubernetes.io/azure-load-balancer-resource-group: "${publicIpResourceGroupName}"
     loadBalancerIP: ${loadBalancerIP}
+%{ endif }

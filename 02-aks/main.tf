@@ -60,7 +60,8 @@ module "firewall" {
   firewall_subnet_cidr        = "${local.firewall_subnet_cidr}"
   external_pip_name           = "${var.external_pip_name}"
   external_pip_resource_group = "${var.external_pip_resource_group}"
-  log_analytics_workspace_id  = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
+  log_analytics_id            = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
+  log_analytics_workspace_id  = "${azurerm_log_analytics_workspace.la_monitor_containers.workspace_id}"
 }
 
 module "external_lb" {
@@ -72,5 +73,6 @@ module "external_lb" {
   resource_group_location     = "${local.location}"
   external_pip_name           = "${var.external_pip_name}"
   external_pip_resource_group = "${var.external_pip_resource_group}"
-  log_analytics_workspace_id  = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
+  log_analytics_id            = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
+  log_analytics_workspace_id  = "${azurerm_log_analytics_workspace.la_monitor_containers.workspace_id}"
 }

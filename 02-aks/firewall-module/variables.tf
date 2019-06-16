@@ -46,3 +46,7 @@ variable "external_pip_resource_group" {
 variable "log_analytics_workspace_id" {
   type = "string"
 }
+
+variable "log_analytics_id" {
+  type = "string"
+}

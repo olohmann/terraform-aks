@@ -192,7 +192,7 @@ resource "azurerm_monitor_diagnostic_setting" "firewall_diagnostics" {
   count                      = "${local.cnt_deploy}"
   name                       = "firewall_diagnostics"
   target_resource_id         = "${azurerm_firewall.firewall.*.id[0]}"
-  log_analytics_workspace_id = "${var.log_analytics_workspace_id}"
+  log_analytics_workspace_id = "${var.log_analytics_id}"
 
   log {
     category = "AzureFirewallApplicationRule"
