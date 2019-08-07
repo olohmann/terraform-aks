@@ -1,5 +1,5 @@
 provider "azurerm" {
-  version = "~>1.30.1"
+  version = "~>1.32.1"
 }
 
 provider "local" {
@@ -42,7 +42,7 @@ data "external" "helm_init_client_only" {
 }
 
 provider "kubernetes" {
-  version                = "~>1.7.0"
+  version                = "~>1.8.1"
   load_config_file       = false
   host                   = "${data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.host}"
   client_certificate     = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_certificate)}"
@@ -51,7 +51,7 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  version         = "~>0.9.1"
+  version         = "~>0.10.2"
   namespace       = "kube-system"
   service_account = "tiller-sa"
   install_tiller  = "true"

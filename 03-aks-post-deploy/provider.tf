@@ -1,5 +1,5 @@
 provider "azurerm" {
-    version = "~>1.30.1"
+  version = "~>1.32.1"
 }
 
 locals {
@@ -12,7 +12,7 @@ data "azurerm_kubernetes_cluster" "aks" {
 }
 
 provider "kubernetes" {
-  version                = "~>1.7.0"
+  version                = "~>1.8.1"
   load_config_file       = false
   host                   = "${data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.host}"
   client_certificate     = "${base64decode(data.azurerm_kubernetes_cluster.aks.kube_admin_config.0.client_certificate)}"
