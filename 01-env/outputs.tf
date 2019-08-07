@@ -3,14 +3,14 @@ output "aks_aad_integration_message" {
 }
 
 output "aks_cluster_sp_app_id" {
-  value = "${azuread_application.aks_app.application_id}"
-} 
+  value = "${var.create_aks_cluster_sp == "false" ? "" : azuread_application.aks_app.*.application_id[0]}"
+}
 
 output "aks_cluster_sp_object_id" {
-  value = "${azuread_service_principal.aks_app_sp.id}"
+  value = "${var.create_aks_cluster_sp == "false" ? "" : azuread_service_principal.aks_app_sp.*.id[0]}"
 }
 
 output "aks_cluster_sp_secret" {
-  value = "${local.aks_sp_password}"
+  value     = "${var.create_aks_cluster_sp == "false" ? "" : random_uuid.aks_sp_password.*.result[0]}"
   sensitive = true
 }

@@ -198,8 +198,10 @@ function get_abs_filename() {
 }
 
 function set_tf_output() {
-    # Transform terraform outputs to environment vars with __TF_ prefix, that will be transferred to dependant sub-deployments.
-    eval $(${TERRAFORM_PATH} output -json | python -c 'import sys, json; tf_output = json.load(sys.stdin); sys.stdout.write(";".join(map(lambda key: "export TF_VAR_{key}=\"{value}\"".format(key=key, value=tf_output[key]["value"]), tf_output.keys())))')
+    # Transform terraform outputs to environment vars with TF_VAR prefix, 
+    # that will be transferred to dependant sub-deployments.
+    # Empty ("") output values will be omitted!
+    eval $(${TERRAFORM_PATH} output -json |  jq -r 'with_entries(select(.value.value!=""))' | python -c 'import sys, json; tf_output = json.load(sys.stdin); sys.stdout.write(";".join(map(lambda key: "export TF_VAR_{key}=\"{value}\"".format(key=key, value=tf_output[key]["value"]), tf_output.keys())))')
 }
 
 # Automatically finds all subfolders to "run_tf.sh" that have *.tf files.
