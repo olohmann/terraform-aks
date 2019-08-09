@@ -40,6 +40,7 @@ resource "azurerm_subnet" "aks_subnet" {
   address_prefix       = "${local.aks_subnet_cidr}"
   virtual_network_name = "${azurerm_virtual_network.vnet.name}"
   route_table_id       = "${var.deploy_azure_firewall == "true" ? module.firewall.aks_subnet_rt_id : module.external_lb.aks_subnet_rt_id}"
+  service_endpoints    = "${var.aks_subnet_service_endpoints}"
 }
 
 resource "azurerm_subnet_route_table_association" "rt_association" {
