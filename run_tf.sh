@@ -46,7 +46,7 @@ oEIgXTMyCILo34Fa/C6VCm2WBgz9zZO8/rHIiQm1J5zqz0DrDwKBUM9C
 EOF
 
 # Required external tools to be available on PATH.
-REQUIRED_TOOLS=("wget" "unzip" "az" "jq" "python" "openssl" "curl" "gpg" "shasum" "kubectl" "helm")
+REQUIRED_TOOLS=("wget" "unzip" "az" "jq" "python" "openssl" "curl" "gpg" "shasum")
 
 declare TERRAFORM_PATH
 
