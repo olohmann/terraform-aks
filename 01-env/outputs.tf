@@ -11,6 +11,6 @@ output "aks_cluster_sp_object_id" {
 }
 
 output "aks_cluster_sp_secret" {
-  value     = "${var.create_aks_cluster_sp == "false" ? "" : random_uuid.aks_sp_password.*.result[0]}"
+  value     = "${var.create_aks_cluster_sp == "false" ? "" : random_string.aks_sp_password.*.result[0]}"
   sensitive = true
 }

@@ -3,8 +3,10 @@ locals {
   aks_aad_sp = "${lower("${terraform.workspace}-${var.prefix}-aks-aad-sp")}"
 }
 
-resource "random_uuid" "aks_sp_password" {
+resource "random_string" "aks_sp_password" {
   count = "${var.create_aks_cluster_sp == "false" ? 0 : 1}"
+  length  = 23
+  special = false
 }
 
 resource "azuread_application" "aks_app" {
@@ -25,7 +27,7 @@ resource "azuread_service_principal" "aks_app_sp" {
 resource "azuread_service_principal_password" "aks_app_sp_password" {
   count                = "${var.create_aks_cluster_sp == "false" ? 0 : 1}"
   service_principal_id = "${azuread_service_principal.aks_app_sp.*.id[0]}"
-  value                = "${random_uuid.aks_sp_password.*.result[0]}"
+  value                = "${random_string.aks_sp_password.*.result[0]}"
   end_date             = "2022-01-01T00:00:00Z"
 }
 
