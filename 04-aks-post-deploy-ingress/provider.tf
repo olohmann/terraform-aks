@@ -51,7 +51,6 @@ provider "kubernetes" {
 }
 
 provider "helm" {
-  timeout         = "15m" // Increase timeout as initial deployments may take longer than the 5min default
   version         = "~>0.10.2"
   namespace       = "kube-system"
   service_account = "tiller-sa"

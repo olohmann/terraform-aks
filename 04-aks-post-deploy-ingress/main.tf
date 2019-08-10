@@ -9,6 +9,7 @@ data "template_file" "helm_values" {
 }
 
 resource "helm_release" "nginx_ingress_release" {
+  timeout   = "900" // Increase timeout to 15min as initial deployments may take longer than the 5min default
   name      = "nginx-ingress"
   chart     = "stable/nginx-ingress"
   namespace = "${var.ingress_namespace}"
