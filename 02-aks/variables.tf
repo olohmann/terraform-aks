@@ -14,7 +14,7 @@ variable "location_log_analytics" {
 }
 
 variable "aks_kubernetes_version" {
-  default = "1.13.5"
+  default = "1.13.8"
   description = "The Kubernetes Version of the AKS cluster."
 }
 
