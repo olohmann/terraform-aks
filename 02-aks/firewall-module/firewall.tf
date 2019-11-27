@@ -67,6 +67,8 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
     source_addresses = ["${var.vnet_address_space}"]
 
     target_fqdns = [
+      // https://docs.microsoft.com/en-us/azure/aks/limit-egress-traffic
+
       "*.hcp.${var.resource_group_location}.azmk8s.io",
       "*.tun.${var.resource_group_location}.azmk8s.io",
 
@@ -81,18 +83,31 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
 
       "*.ubuntu.com",
       "packages.microsoft.com",
+
+      // GPU
+      "nvidia.github.io",
+      "us.download.nvidia.com",
+      "apt.dockerproject.org",
+      
+      // Monitor
       "dc.services.visualstudio.com",
       "${var.log_analytics_workspace_id}.ods.opinsights.azure.com",
       "${var.log_analytics_workspace_id}.oms.opinsights.azure.com",
+      "*.microsoftonline.com",
       "*.monitoring.azure.com",
 
+      // Dev Spaces,
+      "cloudflare.docker.com",
+      "gcr.io",
+      "storage.googleapis.com",
+      "*.azds.io",
+
+      // Polcies
+      "*.gk.${var.resource_group_location}.azmk8s.io",
       "gov-prod-policy-data.trafficmanager.net",
+      "raw.githubusercontent.com",
+      "dc.services.visualstudio.com	"
 
-      "apt.dockerproject.org",
-      "nvidia.github.io",
-
-      // Tiller, remove with 3.0 or re-host
-      "gcr.io"
     ]
 
     protocol {
@@ -108,7 +123,10 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
 
     target_fqdns = [
       "api.snapcraft.io",
-      "*.ubuntu.com"
+      "*.ubuntu.com",
+      "security.ubuntu.com",
+      "azure.archive.ubuntu.com",
+      "changelogs.ubuntu.com"
     ]
 
     protocol {

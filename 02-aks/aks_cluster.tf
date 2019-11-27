@@ -53,5 +53,9 @@ resource "azurerm_kubernetes_cluster" "aks" {
       enabled = true
       log_analytics_workspace_id = "${azurerm_log_analytics_workspace.la_monitor_containers.id}"
     }
+
+    azure_policy {
+      enabled = true
+    }
   }
 }
