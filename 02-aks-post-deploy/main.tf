@@ -1,5 +1,5 @@
 resource "kubernetes_cluster_role_binding" "cluster_admins_rb" {
-    count = "${length(var.aks_cluster_admins)}"
+    count = length(var.aks_cluster_admins)
 
     metadata {
         name = "cluster-admins-${count.index}"
@@ -11,7 +11,7 @@ resource "kubernetes_cluster_role_binding" "cluster_admins_rb" {
     }
     subject {
         kind = "User"
-        name = "${element(var.aks_cluster_admins, count.index)}"
+        name = element(var.aks_cluster_admins, count.index)
         api_group = "rbac.authorization.k8s.io"
     }
 }

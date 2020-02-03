@@ -6,6 +6,11 @@
 *.generated.*
 *.tfplan
 env*.sh
+*-env.tfvars
+env.tfvars
+
+.idea
+
 
 # Clutter
 ~$*
