@@ -15,9 +15,9 @@ resource "azurerm_role_assignment" "network_contributor_resource_group" {
 }
 
 /* Faster Monitoring Results, see https://docs.microsoft.com/en-us/azure/azure-monitor/insights/container-insights-update-metrics */
-resource "azurerm_role_assignment" "network_contributor_resource_group" {
+resource "azurerm_role_assignment" "monitoring_metrics_publisher" {
   count                = var.assign_roles == true ? 1 : 0
-  scope                = azurerm_resource_group.rg.id
+  scope                = azurerm_kubernetes_cluster.aks.id
   role_definition_name = "Monitoring Metrics Publisher"
   principal_id         = local.aks_sp_object_id
 }
