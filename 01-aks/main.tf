@@ -14,12 +14,13 @@ locals {
   # aks services   10.1.0.0/20 -> IP Range: 10.1.0.1 - 10.0.15.254
   # docker bridge  172.17.0.1/16
   # firewall       10.0.240.0/24 -> IP Range: 10.0.240.1 - 10.0.240.254
-  vnet_cidr            = "10.0.0.0/16"
-  aks_subnet_cidr      = "10.0.0.0/20"
-  aks_service_cidr     = "10.1.0.0/20"
-  aks_dns_service_ip   = "10.1.0.10"
-  docker_bridge_cidr   = "172.17.0.1/16"
-  firewall_subnet_cidr = "10.0.240.0/24"
+  vnet_cidr                = "10.0.0.0/16"
+  aks_subnet_cidr          = "10.0.0.0/20"
+  aks_service_cidr         = "10.1.0.0/20"
+  aks_dns_service_ip       = "10.1.0.10"
+  docker_bridge_cidr       = "172.17.0.1/16"
+  firewall_subnet_cidr     = "10.0.240.0/26"        // Placeholder Subnet for egress lockdown via AzFW
+  app_gw_subnet_cidr       = "10.0.240.64/26"       // Placeholder Subnet for AppGW Ingress
 }
 
 resource "azurerm_resource_group" "rg" {
@@ -42,3 +43,4 @@ resource "azurerm_subnet" "aks_subnet" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   service_endpoints    = var.aks_subnet_service_endpoints
 }
+

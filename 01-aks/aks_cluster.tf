@@ -1,5 +1,5 @@
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                = "${local.prefix_kebap}"
+  name                = local.prefix_kebap
   location            = azurerm_resource_group.rg.location
   dns_prefix          = "${local.prefix_kebap}-aks-${local.hash_suffix}"
   resource_group_name = azurerm_resource_group.rg.name
@@ -19,6 +19,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     name            = "agentpool"
     node_count      = var.aks_vm_count
     vm_size         = var.aks_vm_size
+    type            = var.aks_node_pool_type
 
     vnet_subnet_id = azurerm_subnet.aks_subnet.id
   }
@@ -48,7 +49,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     dns_service_ip = local.aks_dns_service_ip
   }
 
-  enable_pod_security_policy = true
+  enable_pod_security_policy = var.use_pod_security_policy
 
   addon_profile {
     oms_agent {
