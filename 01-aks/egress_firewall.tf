@@ -1,7 +1,7 @@
 locals {
   // Little TF "hack" - use a map to signal either an empty or a one-set entry.
   // Easier to read than doing count-based deployments.
-  fw_deployment_map = var.deploy_egress_lockdown ? {} : { fw = true }
+  fw_deployment_map = var.deploy_egress_lockdown ? { fw = true } : {}
 }
 
 resource "azurerm_subnet" "firewall_subnet" {
@@ -15,12 +15,12 @@ resource "azurerm_subnet" "firewall_subnet" {
 resource "azurerm_public_ip" "firewall_pip" {
   for_each = local.fw_deployment_map
 
-  name                = "${local.prefix_kebap}-${local.hash_suffix}-pip"
+  name                = "${local.prefix_kebap}-${local.hash_suffix}-fw-pip"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   allocation_method   = "Static"
   sku                 = "Standard"
-  domain_name_label   = "${local.prefix_kebap}-${local.hash_suffix}"
+  domain_name_label   = "${local.prefix_kebap}-${local.hash_suffix}-fw"
 }
 
 resource "azurerm_route_table" "aks_subnet_firewall_rt" {
@@ -34,7 +34,7 @@ resource "azurerm_route_table" "aks_subnet_firewall_rt" {
     name                   = "default"
     address_prefix         = "0.0.0.0/0"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = azurerm_firewall.firewall[each.key].ip_configuration[0].0.private_ip_address
+    next_hop_in_ip_address = azurerm_firewall.firewall[each.key].ip_configuration.0.private_ip_address
   }
 }
 
@@ -78,7 +78,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   rule {
     name = "aks-rules-https"
 
-    source_addresses = [azurerm_virtual_network.vnet.address_space]
+    source_addresses = azurerm_virtual_network.vnet.address_space
 
     target_fqdns = [
       "*.hcp.${azurerm_kubernetes_cluster.aks.location}.azmk8s.io",
@@ -112,7 +112,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   rule {
     name = "aks-rules-gpu-https"
 
-    source_addresses = [azurerm_virtual_network.vnet.address_space]
+    source_addresses = azurerm_virtual_network.vnet.address_space
 
     target_fqdns = [
       "nvidia.github.io",
@@ -140,7 +140,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   rule {
     name = "aks-rules-monitoring-https"
 
-    source_addresses = [azurerm_virtual_network.vnet.address_space]
+    source_addresses = azurerm_virtual_network.vnet.address_space
 
     target_fqdns = [
       "dc.services.visualstudio.com",
@@ -168,7 +168,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   rule {
     name = "aks-rules-dev-spaces-https"
 
-    source_addresses = [azurerm_virtual_network.vnet.address_space]
+    source_addresses = azurerm_virtual_network.vnet.address_space
 
     target_fqdns = [
       "cloudflare.docker.com",
@@ -196,7 +196,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   rule {
     name = "aks-rules-azure-policy-https"
 
-    source_addresses = [azurerm_virtual_network.vnet.address_space]
+    source_addresses = azurerm_virtual_network.vnet.address_space
 
     target_fqdns = [
       "gov-prod-policy-data.trafficmanager.net",
@@ -233,7 +233,7 @@ resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   rule {
     name = "aks-rules-http"
 
-    source_addresses = [azurerm_virtual_network.vnet.address_space]
+    source_addresses = azurerm_virtual_network.vnet.address_space
 
     target_fqdns = [
       "security.ubuntu.com",
@@ -260,7 +260,7 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
   rule {
     name = "ntp-ubuntu"
 
-    source_addresses = ["*"]
+    source_addresses = azurerm_virtual_network.vnet.address_space
 
     destination_ports = [
       "123"
@@ -303,7 +303,7 @@ resource "azurerm_firewall_network_rule_collection" "egress_rules_network" {
   rule {
     name = "aks-rules-internal-tls"
 
-    source_addresses = ["10.0.0.0/8"]
+    source_addresses = azurerm_virtual_network.vnet.address_space
 
     destination_ports = [
       "443"

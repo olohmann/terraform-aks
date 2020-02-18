@@ -4,7 +4,7 @@
 locals {
   // Little TF "hack" - use a map to signal either an empty or a one-set entry.
   // Easier to read than doing count-based deployments.
-  app_gw_deployment_map = var.deploy_appgw_ingress_controller ? {} : { appgw = true }
+  app_gw_deployment_map = var.deploy_appgw_ingress_controller ? { appgw = true } : {}
 }
 
 resource "azurerm_subnet" "app_gw_subnet" {
@@ -18,12 +18,12 @@ resource "azurerm_subnet" "app_gw_subnet" {
 resource "azurerm_public_ip" "appgw_pip" {
   for_each = local.app_gw_deployment_map
 
-  name                = "${local.prefix_kebap}-${local.hash_suffix}-pip"
+  name                = "${local.prefix_kebap}-${local.hash_suffix}-appgw-pip"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   allocation_method   = "Static"
   sku                 = "Standard"
-  domain_name_label   = "${local.prefix_kebap}-${local.hash_suffix}"
+  domain_name_label   = "${local.prefix_kebap}-${local.hash_suffix}-appgw"
 }
 
 locals {

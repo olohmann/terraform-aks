@@ -26,7 +26,7 @@ variable "location" {
 
 variable "log_analytics_location" {
   type        = string
-  default     = "northeurope"
+  default     = ""
   description = "The Azure region for the Log Analytics Workspace."
 }
 
@@ -127,17 +127,17 @@ variable "external_azure_container_registry_resource_group_name" {
 }
 
 /* ------------ New ACR -------------- */
-variable "create_azure_container_registry" {
+variable "deploy_azure_container_registry" {
   type        = bool
   description = "Boolean flag, true: create new dedicated ACR, false: don't create dedicated ACR."
-  default     = true
+  default     = false
 }
 
 /* ------ Permission Handling -------- */
 variable "deploy_container_registry_secret" {
   type = bool
-  default = true
-  description = "When true, deploys access to the ACR in cluster. See https://docs.microsoft.com/en-us/azure/aks/cluster-container-registry-integration for details."
+  default = false
+  description = "When true, deploys access to the ACR in cluster. See https://docs.microsoft.com/en-us/azure/container-registry/container-registry-auth-kubernetes#create-an-image-pull-secret for details."
 }
 
 variable "assign_aks_roles" {
@@ -157,8 +157,8 @@ variable "aks_subnet_service_endpoints" {
   default = ["Microsoft.Storage", "Microsoft.KeyVault"]
 }
 
-/* ----------- AKS Cluster: Inner Config ---------- */
+/* ----------- AKS Cluster: Inner Setup ---------- */
 variable "aks_cluster_admins" {
   type = list
-  description = "The cluster-admins for the Kubernetes cluster."
+  description = "The TBD cluster-admins for the Kubernetes cluster."
 }
