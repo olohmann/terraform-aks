@@ -1,13 +1,13 @@
 // ---- Overall Deployment Options -----
 variable "deploy_egress_lockdown" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "If set to 'true' the cluster will be deployed in egress lockdown mode. This setup is mutual EXCLUSIVE with deploying an AppGW ingress controller. That is, an Azure Firewall will be deployed. Details described here: https://docs.microsoft.com/en-us/azure/aks/limit-egress-traffic"
 }
 
 variable "deploy_appgw_ingress_controller" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "If set to 'true' the cluster will be deployed in with an App GW that will be configured as an ingress controller. This setup is mutual EXCLUSIVE with deploying the egress lockdown as this would result in asymmetric traffic."
 }
 
@@ -49,9 +49,15 @@ variable "aks_vm_count" {
 }
 
 variable "aks_node_pool_type" {
-  type = string
-  default = "VirtualMachineScaleSets"
+  type        = string
+  default     = "VirtualMachineScaleSets"
   description = "Type of the Agent Pool. Possible values are AvailabilitySet and VirtualMachineScaleSets. Changing this forces a new resource to be created."
+}
+
+variable "aks_enable_azure_policy" {
+  type        = bool
+  default     = false
+  description = "Enable AKS Policy Support."
 }
 
 variable "use_pod_security_policy" {
@@ -135,8 +141,8 @@ variable "deploy_azure_container_registry" {
 
 /* ------ Permission Handling -------- */
 variable "deploy_container_registry_secret" {
-  type = bool
-  default = false
+  type        = bool
+  default     = false
   description = "When true, deploys access to the ACR in cluster. See https://docs.microsoft.com/en-us/azure/container-registry/container-registry-auth-kubernetes#create-an-image-pull-secret for details."
 }
 
@@ -154,11 +160,11 @@ variable "assign_acr_roles" {
 
 variable "aks_subnet_service_endpoints" {
   type    = list(string)
-  default = ["Microsoft.Storage", "Microsoft.KeyVault"]
+  default = ["Microsoft.Storage", "Microsoft.KeyVault", "Microsoft.Sql"]
 }
 
 /* ----------- AKS Cluster: Inner Setup ---------- */
 variable "aks_cluster_admins" {
-  type = list
+  type        = list
   description = "The TBD cluster-admins for the Kubernetes cluster."
 }

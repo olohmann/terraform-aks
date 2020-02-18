@@ -58,7 +58,7 @@ resource "azurerm_kubernetes_cluster" "aks" {
     }
 
     azure_policy {
-      enabled = true
+      enabled = var.aks_enable_azure_policy
     }
   }
 }
