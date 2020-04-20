@@ -43,4 +43,3 @@ resource "azurerm_subnet" "aks_subnet" {
   virtual_network_name = azurerm_virtual_network.vnet.name
   service_endpoints    = var.aks_subnet_service_endpoints
 }
-

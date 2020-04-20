@@ -1,59 +1,113 @@
 #!/usr/bin/env pwsh
+#Requires -PSEdition Core
+
+<#
+.SYNOPSIS 
+    A wrapper around Terraform to ease integration with Azure state backends.
+    It is very convention-driven, so please see https://github.com/olohmann/terraform-azure-runner/README.md
+    for details. 
+.DESCRIPTION 
+    See https://github.com/olohmann/terraform-azure-runner/README.md for details.
+.NOTES 
+    File Name  : tf.ps1 
+    Author     : Oliver Lohmann (oliver@lohmann.io) 
+.LINK 
+    https://github.com/olohmann/terraform-azure-runner
+.EXAMPLE 
+    See https://github.com/olohmann/terraform-azure-runner/README.md for details.
+#>
 
 param (
+    # Target Path to the Terraform .tf files directory.
     [Parameter(
             Mandatory = $true)]
     [string]
     $TargetPath,
 
+    # Name of the environment (e.g. dev, qa, prod). Is translated to a Terraform workspace.
     [Parameter(
             Mandatory = $false,
             HelpMessage = "EnvironmentName is a lowercase, alphanumeric name, starting with a letter.")]
     [Alias('e')]
     [ValidatePattern('(?-i:^[a-z][a-z0-9]+$)')]
+    [ValidateLength(1,8)]
     [string]
     $EnvironmentName = "dev",
 
+    # A shared prefix which is used to prefix the resource group for the storage account.
+    # It will also be set to a TF_prefix environment variable when envoking the Terraform
+    # deployment process.
     [Parameter(
             Mandatory = $false,
             HelpMessage = "Prefix is a lowercase, alphanumeric name, starting with a letter.")]
     [ValidatePattern('(?-i:^[a-z][a-z0-9]+$)')]
+    [ValidateLength(1,8)]
     [string]
     $Prefix = "fabrikam",
 
+    # The location for the resource group and storage account that will be created for the 
+    # Terraform state store.
     [Parameter(
             Mandatory = $false,
             HelpMessage = "Location is a valid Azure location.")]
     [string]$Location = "westeurope",
+    
+    # The path to a Terraform variable file that shall be passed to the deployment.
     [Parameter(Mandatory = $false)][string]$VarFile = "",
 
+    # When set, uses the explicit name for the util resource group instead of a generated
+    # one. Not recommended to use, instead follow the conventional defaults.
     [Parameter(Mandatory = $false)][string]$UtilResourceGroupName = "",
 
+    # Do not print colored console ouptut when set.
     [switch]$NoColor = $false,
 
+    # Run Terraform init.
     [switch]$Init = $false,
+
+    # Run Terraform plan.
     [switch]$Plan = $false,
+
+    # Run Terraform destroy.
     [switch]$Destroy = $false,
+
+    # Run Terraform apply.
     [switch]$Apply = $false,
+
+    # Run Terraform validate.
+    [switch][Alias('v')]$Validate = $false,
+
+    # Run Terraform output.
     [switch]$Output = $false,
 
+    # Use an existing Terraform plan (when applying).
     [switch]$UseExistingTerraformPlan = $false,
+    
+    # Keep the Azure Storage Account's firewall open instead of putting it to default deny 
+    # when finishing the deployment process.
     [switch]$LeaveFirewallOpen = $false,
+    
+    # Do no change the current firewall setup.
     [switch]$SkipFirewallUpdate = $false,
 
+    # Print the script's version and exit.
     [switch]$Version = $false,
 
+    # Download the Terraform binary in the minimal required version. 
     [switch][Alias('d')]$DownloadTerraform = $false,
+   
+    # Print the environment variables during execution.
     [switch][Alias('p')]$PrintEnv = $false,
-    [switch][Alias('v')]$Validate = $false,
+    
+    # Force, that is do not ask for interactive input.
     [switch][Alias('f')]$Force = $false
 )
 
 Set-StrictMode -Version latest
 $ErrorActionPreference = "Stop"
 
-$ScriptVersion = [version]"2.0.0"
-$TerrafomMinimumVersion = [version]"0.12.18"
+$ScriptVersion = [version]"2.1.0"
+$TerrafomMinimumVersion = [version]"0.12.21"
 $TerraformNoColor = if ($NoColor) { "-no-color" } else { "" }
 $TerraformPlanPath = "terraform.tfplan"
 $TerraformOutputPath = "output.json"

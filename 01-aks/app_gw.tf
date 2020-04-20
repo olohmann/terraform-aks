@@ -49,6 +49,7 @@ resource "azurerm_application_gateway" "app_gw" {
   lifecycle {
     ignore_changes = [ backend_address_pool, backend_http_settings, http_listener, request_routing_rule, frontend_port, probe ]
   }
+
   name                = "${local.prefix_kebap}-${local.hash_suffix}-${each.key}"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
