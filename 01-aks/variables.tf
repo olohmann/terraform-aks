@@ -32,7 +32,7 @@ variable "log_analytics_location" {
 
 variable "aks_kubernetes_version" {
   type        = string
-  default     = "1.15.7"
+  default     = "1.15.10"
   description = "The Kubernetes Version of the AKS cluster."
 }
 
@@ -67,6 +67,12 @@ variable "use_pod_security_policy" {
 }
 
 /* -- Service Principal Configuration -- */
+variable "use_external_aks_cluster_sp" {
+  type = bool
+  description = "If true, the external_aks_cluster_sp_* variables are used to setup an external Service Principal instead of creating a service principal."
+  default = false
+}
+
 variable "external_aks_cluster_sp_app_id" {
   type        = string
   description = "The Application ID for the Service Principal to use for this Managed Kubernetes Cluster"

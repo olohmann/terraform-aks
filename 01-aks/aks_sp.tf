@@ -1,13 +1,12 @@
 locals {
-  create_aks_sp       = var.external_aks_cluster_sp_app_id == "" ? true : false
-  create_aks_sp_count = local.create_aks_sp ? 1 : 0
+  create_aks_sp_count = var.use_external_aks_cluster_sp ? 0 : 1
 
-  aks_sp     = lower("${terraform.workspace}-${var.prefix}-aks-sp")
+  aks_sp = lower("${terraform.workspace}-${var.prefix}-aks-sp")
   aks_aad_sp = lower("${terraform.workspace}-${var.prefix}-aks-aad-sp")
 
-  aks_sp_app_id     = local.create_aks_sp ? azuread_application.aks_app.*.application_id[0] : var.external_aks_cluster_sp_app_id
-  aks_sp_object_id  = local.create_aks_sp ? azuread_service_principal.aks_app_sp.*.id[0] : var.external_aks_cluster_sp_object_id
-  aks_sp_secret     = local.create_aks_sp ? random_string.aks_sp_password.*.result[0] : var.external_aks_cluster_sp_secret
+  aks_sp_app_id = var.use_external_aks_cluster_sp ? var.external_aks_cluster_sp_app_id : azuread_application.aks_app.*.application_id[0]
+  aks_sp_object_id = var.use_external_aks_cluster_sp ? var.external_aks_cluster_sp_object_id : azuread_service_principal.aks_app_sp.*.id[0]
+  aks_sp_secret = var.use_external_aks_cluster_sp ? var.external_aks_cluster_sp_secret : random_string.aks_sp_password.*.result[0]
 }
 
 resource "random_string" "aks_sp_password" {
