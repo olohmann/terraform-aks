@@ -15,18 +15,18 @@ resource "azurerm_subnet" "firewall_subnet" {
 resource "azurerm_public_ip" "firewall_pip" {
   for_each = local.fw_deployment_map
 
-  name                = "${local.prefix_kebap}-${local.hash_suffix}-fw-pip"
+  name                = "${local.prefix_kebab}-${local.hash_suffix}-fw-pip"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
   allocation_method   = "Static"
   sku                 = "Standard"
-  domain_name_label   = "${local.prefix_kebap}-${local.hash_suffix}-fw"
+  domain_name_label   = "${local.prefix_kebab}-${local.hash_suffix}-fw"
 }
 
 resource "azurerm_route_table" "aks_subnet_firewall_rt" {
   for_each = local.fw_deployment_map
 
-  name                = "${local.prefix_kebap}-${local.hash_suffix}-rt"
+  name                = "${local.prefix_kebab}-${local.hash_suffix}-rt"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
@@ -41,7 +41,7 @@ resource "azurerm_route_table" "aks_subnet_firewall_rt" {
 resource "azurerm_firewall" "firewall" {
   for_each = local.fw_deployment_map
 
-  name                = "${local.prefix_kebap}-${local.hash_suffix}-fw"
+  name                = "${local.prefix_kebab}-${local.hash_suffix}-fw"
   resource_group_name = azurerm_resource_group.rg.name
   location            = azurerm_resource_group.rg.location
 
@@ -56,7 +56,7 @@ resource "azurerm_firewall" "firewall" {
 resource "azurerm_firewall_application_rule_collection" "egress_rules_fqdn" {
   for_each = local.fw_deployment_map
 
-  name                = "${local.prefix_kebap}-${local.hash_suffix}-aks-egress"
+  name                = "${local.prefix_kebab}-${local.hash_suffix}-aks-egress"
   azure_firewall_name = azurerm_firewall.firewall[each.key].name
   resource_group_name = azurerm_firewall.firewall[each.key].resource_group_name
   priority            = 100

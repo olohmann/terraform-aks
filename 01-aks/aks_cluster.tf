@@ -1,7 +1,7 @@
 resource "azurerm_kubernetes_cluster" "aks" {
-  name                = local.prefix_kebap
+  name                = local.prefix_kebab
   location            = azurerm_resource_group.rg.location
-  dns_prefix          = "${local.prefix_kebap}-aks-${local.hash_suffix}"
+  dns_prefix          = "${local.prefix_kebab}-aks-${local.hash_suffix}"
   resource_group_name = azurerm_resource_group.rg.name
   kubernetes_version  = var.aks_kubernetes_version
 

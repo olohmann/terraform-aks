@@ -17,19 +17,15 @@ Please note that the additional services like Azure Key Vault and Azure Storage 
 TODO: Update.
 
 
-## Deployment Structure
+## Repository Structure
 
-The deployment structure is basically divided into two parts. The first part takes care of the Azure Resources, the second part takes care of the in-cluster Kubernetes components.
+The directory `01-aks` contains the source code 
 
-- `01-aks`
-
-- `02-aks-post-deploy`
-
-    After completing the Azure resource deployment, the post deploy step configures the Kubernetes cluster role bindings and prepares the helm service account.
-
-    > Requires cluster-admin rights on Kubernetes.
+## Usage
 
 ## Misc
+
+To get the local .kube/config file configured with the right 
 
 ### Getting AKS Admin credentials
 

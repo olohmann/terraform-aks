@@ -1,5 +1,5 @@
 locals {
-  prefix_kebap = lower("${var.prefix}-${terraform.workspace}")
+  prefix_kebab = lower("${var.prefix}-${terraform.workspace}")
   prefix_snake = lower("${var.prefix}_${terraform.workspace}")
   prefix_flat  = lower("${var.prefix}${terraform.workspace}")
   location     = lower(replace(var.location, " ", ""))
@@ -29,7 +29,7 @@ resource "azurerm_resource_group" "rg" {
 }
 
 resource "azurerm_virtual_network" "vnet" {
-  name                = "${local.prefix_kebap}-vnet"
+  name                = "${local.prefix_kebab}-vnet"
   location            = azurerm_resource_group.rg.location
   resource_group_name = azurerm_resource_group.rg.name
   address_space       = ["${local.vnet_cidr}"]
