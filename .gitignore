@@ -3,6 +3,7 @@
 .kube
 
 *.tfvars
+*.tfvars.old
 *.generated.*
 *.tfplan
 env*.sh

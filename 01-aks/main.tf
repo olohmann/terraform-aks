@@ -39,7 +39,7 @@ resource "azurerm_virtual_network" "vnet" {
 resource "azurerm_subnet" "aks_subnet" {
   name                 = "aks_subnet"
   resource_group_name  = azurerm_resource_group.rg.name
-  address_prefix       = local.aks_subnet_cidr
+  address_prefixes     = [local.aks_subnet_cidr]
   virtual_network_name = azurerm_virtual_network.vnet.name
   service_endpoints    = var.aks_subnet_service_endpoints
 }

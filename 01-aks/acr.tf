@@ -17,12 +17,12 @@ resource "azurerm_role_assignment" "external_acr_aks_pull" {
   count                = var.use_external_azure_container_registry ? (var.assign_acr_roles ? 1 : 0) : 0
   scope                = data.azurerm_container_registry.acr_external[0].id
   role_definition_name = "AcrPull"
-  principal_id         = local.aks_sp_object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.identity[0].principal_id
 }
 
 resource "azurerm_role_assignment" "acr_dedicated_pull" {
   count                = var.deploy_azure_container_registry ? (var.assign_acr_roles ? 1 : 0) : 0
   scope                = azurerm_container_registry.acr.*.id[count.index]
   role_definition_name = "AcrPull"
-  principal_id         = local.aks_sp_object_id
+  principal_id         = azurerm_kubernetes_cluster.aks.identity[0].principal_id
 }

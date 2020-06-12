@@ -106,8 +106,8 @@ param (
 Set-StrictMode -Version latest
 $ErrorActionPreference = "Stop"
 
-$ScriptVersion = [version]"2.1.0"
-$TerrafomMinimumVersion = [version]"0.12.21"
+$ScriptVersion = [version]"2.3.0"
+$TerrafomMinimumVersion = [version]"0.12.24"
 $TerraformNoColor = if ($NoColor) { "-no-color" } else { "" }
 $TerraformPlanPath = "terraform.tfplan"
 $TerraformOutputPath = "output.json"
@@ -117,8 +117,27 @@ if ($UtilResourceGroupName -eq "") {
     $UtilResourceGroupName = "$($Prefix)_$($EnvironmentName)_util_rg".ToLower()
 }
 
+# Check Location parameter to avoid Error:
+#The specified location '/home/vsts/work/1/s' is invalid. A location must consist of characters, whitespace, digit, or following symbols '(,)'.
+$CurrentLocation = get-location
+Write-Verbose "Current working location: $CurrentLocation"
+if ($Location -match $CurrentLocation)
+{
+    Write-Warning "Found un-expected content in -Location: $Location . Fallback to 'westeurope'"
+    $Location = "westeurope"
+}
+
 $Location = $Location.ToLower()
 $Location = $Location -Replace " "
+
+# If a non-expanded Azure DevOps Variable assignment was found, print a
+# warning and continue with the default.
+if ($Location -match '\$\([^)]*\)')
+{
+    $Location = "westeurope"
+    Write-Warning "Found un-expanded Azure DevOps Variable assigned to -Location. Fallback to 'westeurope'"
+}
+
 $TargetPath = Resolve-Path $TargetPath
 
 $global:TfStateStorageAccountName = ""
@@ -391,7 +410,7 @@ function CreateOrUpdateTerraformBackend {
     $accountKeyResponse = az storage account keys list --account-name $global:TfStateStorageAccountName | ConvertFrom-Json
     if ($LastExitCode -gt 0) { throw "az CLI error." }
 
-    az storage container create --account-name $global:TfStateStorageAccountName --account-key $accountKeyResponse[0].value --name $global:TfStateContainerName --public-access "off" --auth-mode key --output none
+    az storage container create --account-name $global:TfStateStorageAccountName --account-key $accountKeyResponse[0].value --name $global:TfStateContainerName --auth-mode key --output none
     if ($LastExitCode -gt 0) { throw "az CLI error." }
 }
 
@@ -401,7 +420,7 @@ function LockdownTerraformBackend {
     Write-Verbose "[Terraform State] Rewriting network rules..."
     foreach ($ipRule in $existingNetworkRulesResponse.ipRules) {
         Write-Verbose "[Terraform State] Dropping $($ipRule.ipAddressOrRange)"
-        az storage account network-rule remove --resource-group $UtilResourceGroupName --account-name $Location --ip-address $ipRule.ipAddressOrRange --output none
+        az storage account network-rule remove --resource-group $UtilResourceGroupName --account-name $global:TfStateStorageAccountName --ip-address $ipRule.ipAddressOrRange --output none
         if ($LastExitCode -gt 0) { throw "az CLI error." }
     }
 
