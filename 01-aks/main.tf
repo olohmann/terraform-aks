@@ -2,6 +2,9 @@ locals {
   prefix_kebab = lower("${var.prefix}-${terraform.workspace}")
   prefix_snake = lower("${var.prefix}_${terraform.workspace}")
   prefix_flat  = lower("${var.prefix}${terraform.workspace}")
+  // Truncated version to fit e.g. Storage Accounts naming requirements (<=24 chars)).
+  prefix_flat_short = "${substr(local.prefix_flat, 0, min(18, length(local.prefix_flat)))}${local.hash_suffix}"
+
   location     = lower(replace(var.location, " ", ""))
 
   // The idea of this hash value is to use it as a pseudo-random suffix for

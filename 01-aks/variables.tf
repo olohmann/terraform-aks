@@ -165,3 +165,16 @@ variable "external_kv_cert_name" {
   type        = string
   description = "The name of the certificate/secret that points to the TLS certificate (a passwordless PFX, or a CSR merged in Azure KV)."
 }
+
+/* --- Front Door and Custom Host Name Binding */
+variable "custom_hostname_binding" {
+  type        = string
+  default     = ""
+  description = "Custom Hostname that should be bound by the Front Door."
+}
+
+variable "waf_mode" {
+  type        = string
+  description = "The mode of the WAF of the Frontdoor or App Gateway. Detection as default; Prevention in production mode/stage."
+  default     = "Detection"
+}
