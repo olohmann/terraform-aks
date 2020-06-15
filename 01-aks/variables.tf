@@ -36,32 +36,32 @@ variable "aks_default_node_pool" {
   })
 
   default = {
-    name = "default",
-    node_count = 3,
-    vm_size = "Standard_DS2_v2"
-    availability_zones = [],
-    node_labels = {},
-    node_taints = [],
-    cluster_auto_scaling = false,
+    name                           = "default",
+    node_count                     = 3,
+    vm_size                        = "Standard_DS2_v2"
+    availability_zones             = [],
+    node_labels                    = {},
+    node_taints                    = [],
+    cluster_auto_scaling           = false,
     cluster_auto_scaling_min_count = null,
     cluster_auto_scaling_max_count = null
   }
 }
 
 variable "aks_additional_node_pools" {
-    description = "The map object to configure one or several additional node pools."
-    type = map(object({
-      node_count                     = number
-      vm_size                        = string
-      availability_zones             = list(string)
-      node_labels                    = map(string)
-      node_taints                    = list(string)
-      cluster_auto_scaling           = bool
-      cluster_auto_scaling_min_count = number
-      cluster_auto_scaling_max_count = number
-    }))
+  description = "The map object to configure one or several additional node pools."
+  type = map(object({
+    node_count                     = number
+    vm_size                        = string
+    availability_zones             = list(string)
+    node_labels                    = map(string)
+    node_taints                    = list(string)
+    cluster_auto_scaling           = bool
+    cluster_auto_scaling_min_count = number
+    cluster_auto_scaling_max_count = number
+  }))
 
-    default = {}
+  default = {}
 }
 
 variable "aks_private_cluster_enabled" {
@@ -150,4 +150,18 @@ variable "assign_acr_roles" {
   type        = bool
   description = "If 'true' assigns Pull Rights to AKS, if 'false' skips the role assignments."
   default     = false
+}
+
+/* ------ Key Vault -------- */
+variable "external_kv_name" {
+  type        = string
+  description = "The external key vault name. The KV should contain the TLS certificated that is provisioned to the ingress controller and to the Front Door."
+}
+variable "external_kv_resource_group_name" {
+  type        = string
+  description = "The external key vault resource group name."
+}
+variable "external_kv_cert_name" {
+  type        = string
+  description = "The name of the certificate/secret that points to the TLS certificate (a passwordless PFX, or a CSR merged in Azure KV)."
 }
