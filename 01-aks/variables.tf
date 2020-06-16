@@ -99,6 +99,42 @@ variable "aks_api_server_authorized_ip_ranges" {
   description = "The IP ranges to whitelist for incoming traffic to the masters."
 }
 
+variable "aks_enable_aad_integration_v1" {
+  type        = bool
+  default     = false
+  description = "Enable the AAD v1 integration. Mutual exclusive with v2."
+}
+
+variable "aad_server_app_id" {
+  type = string
+  default = ""
+  description = "Required for AAD integration v1."
+}
+
+variable "aad_server_app_secret" {
+  type = string
+  default = ""
+  description = "Required for AAD integration v1."
+}
+
+variable "aad_client_app_id" {
+  type = string
+  default = ""
+  description = "Required for AAD integration v1."
+}
+
+variable "aad_tenant_id" {
+  type = string
+  default = ""
+  description = "Required for AAD integration v1."
+}
+
+variable "aks_enable_aad_integration_v2" {
+  type        = bool
+  default     = false
+  description = "Enable the AAD v2 integration: https://docs.microsoft.com/en-us/azure/aks/managed-aad"
+}
+
 variable "aks_admin_group_object_ids" {
   type        = list(string)
   default     = []

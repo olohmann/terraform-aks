@@ -1,8 +1,8 @@
-resource "kubernetes_secret" "acr_external_pull_secret" {
-  count = var.deploy_container_registry_secret ? (var.use_external_azure_container_registry ? 1 : 0) : 0
+resource "kubernetes_secret" "acr_pull_secret_external_cr" {
+  count = var.use_external_azure_container_registry ? (var.deploy_container_registry_secret ? 1 : 0) : 0
 
   metadata {
-    name = "acr-external-pull-secret"
+    name = "acr-pull-secret"
   }
 
   data = {

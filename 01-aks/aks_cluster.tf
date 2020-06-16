@@ -1,7 +1,7 @@
 resource "azurerm_kubernetes_cluster" "aks" {
   lifecycle {
     ignore_changes = [
-      default_node_pool[0].node_count
+      default_node_pool[0].node_count, tags
     ]
   }
 
@@ -31,6 +31,10 @@ resource "azurerm_kubernetes_cluster" "aks" {
   dns_prefix = "${local.prefix_kebab}-aks-${local.hash_suffix}"
 
   addon_profile {
+    kube_dashboard {
+      enabled = false
+    }
+
     oms_agent {
       enabled                    = true
       log_analytics_workspace_id = azurerm_log_analytics_workspace.la_monitor_containers.id
@@ -74,10 +78,26 @@ resource "azurerm_kubernetes_cluster" "aks" {
   private_cluster_enabled = var.aks_private_cluster_enabled
 
   role_based_access_control {
-    azure_active_directory {
-      managed                = true
-      admin_group_object_ids = var.aks_admin_group_object_ids
+
+    dynamic "azure_active_directory" {
+      for_each = var.aks_enable_aad_integration_v2 ? [true] : []
+      content {
+        managed                = true
+        admin_group_object_ids = var.aks_admin_group_object_ids
+      }
     }
+
+    dynamic "azure_active_directory" {
+      for_each = var.aks_enable_aad_integration_v1 ? [true] : []
+      content {
+        client_app_id     = var.aad_client_app_id
+        server_app_id     = var.aad_server_app_id
+        server_app_secret = var.aad_server_app_secret
+        tenant_id         = var.aad_tenant_id
+      }
+    }
+
+
     enabled = true
   }
 

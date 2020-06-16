@@ -17,6 +17,7 @@ data "external" "converted_cert" {
   // output: data.external.certs.result.public_key_base64, data.external.certs.result.private_key_base64
 }
 
+// TODO: header filter in Nginx
 resource "kubernetes_namespace" "nginx_ingress" {
   metadata {
     annotations = {
@@ -29,7 +30,8 @@ resource "kubernetes_namespace" "nginx_ingress" {
 
 resource "helm_release" "nginx_ingress" {
   name      = "nginx-ingress"
-  chart     = "stable/nginx-ingress"
+  chart     = "nginx-ingress"
+  repository = "https://kubernetes-charts.storage.googleapis.com"
   namespace = kubernetes_namespace.nginx_ingress.metadata[0].name
 
   set {
