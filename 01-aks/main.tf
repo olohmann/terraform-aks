@@ -59,7 +59,7 @@ resource "azurerm_network_security_group" "nsg_frontdoor" {
     name                       = "Allow_FD"
     priority                   = 700
     protocol                   = "Tcp"
-    source_port_range          = "443"
+    source_port_range          = "*"
     destination_port_range     = "443"
     source_address_prefix      = "AzureFrontDoor.Backend"
     destination_address_prefix = "*"
@@ -88,22 +88,9 @@ resource "azurerm_network_security_group" "nsg_frontdoor" {
     source_address_prefix      = "169.254.169.254"
     destination_address_prefix = "*"
   }
-
-  security_rule {
-    access                     = "Deny"
-    direction                  = "Inbound"
-    name                       = "Deny_Any"
-    priority                   = 1000
-    protocol                   = "*"
-    source_port_range          = "*"
-    destination_port_range     = "*"
-    source_address_prefix      = "*"
-    destination_address_prefix = "*"
-  }
 }
 
 resource "azurerm_subnet_network_security_group_association" "example" {
   network_security_group_id = azurerm_network_security_group.nsg_frontdoor.id
   subnet_id                 = azurerm_subnet.aks_subnet.id
 }
-
