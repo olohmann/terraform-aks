@@ -143,10 +143,9 @@ variable "aks_admin_group_object_ids" {
 
 /* ----------- SSH --------------- */
 
-variable "public_ssh_key_path" {
+variable "public_ssh_public_key_data" {
   type        = string
-  description = "The Path at which your Public SSH Key is located. Defaults to ~/.ssh/id_rsa.pub"
-  default     = "~/.ssh/id_rsa.pub"
+  description = "The data for the public key."
 }
 
 /* -------- External ACR --------- */
